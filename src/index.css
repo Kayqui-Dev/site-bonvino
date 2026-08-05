@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0D0D12;
+    color: #FAF8F5;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Custom Glassmorphism Cards & Borders */
+.glass-obsidian {
+  background: rgba(20, 20, 29, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  transition: all 0.4s ease;
+}
+
+.glass-obsidian:hover {
+  border-color: rgba(201, 168, 76, 0.45);
+  box-shadow: 0 10px 30px -10px rgba(201, 168, 76, 0.15);
+}
+
+.glass-nav {
+  background: rgba(13, 13, 18, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+/* Text Gradients */
+.text-champagne-gradient {
+  background: linear-gradient(135deg, #FAF8F5 20%, #E6D399 60%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0D0D12;
+}
+::-webkit-scrollbar-thumb {
+  background: #1F1F2C;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C9A84C;
+}
+
+/* Micro-interactions */
+.btn-magnetic {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn-magnetic:hover {
+  transform: scale(1.03);
+}
+
+.link-hover {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.link-hover:hover {
+  transform: translateY(-1px);
+}
