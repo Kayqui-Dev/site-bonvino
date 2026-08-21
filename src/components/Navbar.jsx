@@ -37,8 +37,9 @@ export default function Navbar() {
           <Logo />
         </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop Links. Switched at lg, not md: at 768px the four links plus
+            the CTA overflowed the bar by 22px and pushed the page sideways. */}
+        <div className="hidden lg:flex items-center gap-8">
           <a href="#hero" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-platinum link-hover font-medium">
             Home
           </a>
@@ -54,7 +55,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden lg:flex items-center">
           <a
             href={whatsappUrl}
             target="_blank"
@@ -67,7 +68,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Toggle */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex lg:hidden items-center gap-2">
           <a
             href={whatsappUrl}
             target="_blank"
@@ -89,7 +90,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="md:hidden mt-2 max-w-5xl mx-auto glass-navy rounded-2rem p-6 space-y-4 shadow-2xl">
+        <div className="lg:hidden mt-2 max-w-5xl mx-auto glass-navy rounded-2rem p-6 space-y-4 shadow-2xl">
           <a
             href="#hero"
             onClick={() => setMobileOpen(false)}

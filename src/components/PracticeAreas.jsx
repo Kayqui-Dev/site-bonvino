@@ -104,6 +104,21 @@ const AREAS = [
 export default function PracticeAreas() {
   const sectionRef = useRef(null);
   const [active, setActive] = useState(0);
+  // Hover-to-open is a mouse affordance. On a touch screen it fired on tap and
+  // fought the tap-to-close toggle below.
+  const hoverable = useRef(false);
+
+  useEffect(() => {
+    hoverable.current = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }, []);
+
+  // On mobile the folders behave like an accordion, so tapping the open one
+  // closes it. The desktop cabinet always keeps one file open, or it would
+  // collapse into six empty spines.
+  const handleSelect = (i) => {
+    const collapsible = window.matchMedia('(max-width: 1023px)').matches;
+    setActive((prev) => (collapsible && prev === i ? -1 : i));
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -178,11 +193,13 @@ export default function PracticeAreas() {
                     : 'border-platinum/15 bg-navy-elevated/40 hover:border-platinum/35 hover:bg-navy-elevated/70 lg:flex-[0.42]'
                 }`}
               >
-                {/* Chrome edge marks the open file, like a tab standing proud */}
+                {/* Chrome edge marks the open file, like a tab standing proud.
+                    Closed folders keep a dim edge on mobile so the column still
+                    reads as a stack of files rather than plain list rows. */}
                 <span
                   aria-hidden="true"
                   className={`absolute left-0 top-0 bottom-0 w-[3px] chrome-surface transition-opacity duration-500 z-10 ${
-                    isOpen ? 'opacity-100' : 'opacity-0'
+                    isOpen ? 'opacity-100' : 'opacity-25 lg:opacity-0'
                   }`}
                 />
 
@@ -191,21 +208,35 @@ export default function PracticeAreas() {
                 <h3 className={`m-0 ${isOpen ? '' : 'lg:flex-1'}`}>
                   <button
                     type="button"
-                    onClick={() => setActive(i)}
-                    onMouseEnter={() => setActive(i)}
-                    onFocus={() => setActive(i)}
+                    onClick={() => handleSelect(i)}
+                    onMouseEnter={() => hoverable.current && setActive(i)}
+                    // Only keyboard focus opens a file. A tap also focuses the
+                    // button, which would re-open what the tap just closed.
+                    onFocus={(e) => e.target.matches(':focus-visible') && setActive(i)}
                     onKeyDown={(e) => onKeyDown(e, i)}
                     aria-expanded={isOpen}
                     aria-controls={`dossier-panel-${area.id}`}
                     className="dossier-trigger w-full h-full text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-platinum focus-visible:ring-inset"
                   >
-                    {/* Mobile: a plain accordion row in both states */}
-                    <span className="flex lg:hidden items-center gap-4 px-5 py-5">
-                      <Icon className="w-5 h-5 text-platinum shrink-0" />
-                      <span className="flex-1 text-base font-serif text-ivory">{area.title}</span>
+                    {/* Mobile: a file tab — matter code, title, and a marker
+                        that turns as the folder opens. */}
+                    <span className="flex lg:hidden items-center gap-3.5 px-5 py-4">
+                      <Icon
+                        className={`w-5 h-5 shrink-0 transition-colors duration-300 ${
+                          isOpen ? 'text-platinum' : 'text-platinum/60'
+                        }`}
+                      />
+                      <span className="flex flex-col flex-1 min-w-0 gap-0.5">
+                        <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-platinum/70">
+                          {area.matter}
+                        </span>
+                        <span className="text-[15px] font-serif text-ivory leading-snug">
+                          {area.title}
+                        </span>
+                      </span>
                       <Plus
-                        className={`w-4 h-4 text-platinum/50 shrink-0 transition-transform duration-300 ${
-                          isOpen ? 'rotate-45' : ''
+                        className={`w-4 h-4 shrink-0 transition-transform duration-500 ease-out ${
+                          isOpen ? 'rotate-[135deg] text-platinum' : 'text-platinum/50'
                         }`}
                       />
                     </span>
@@ -232,16 +263,20 @@ export default function PracticeAreas() {
                   </button>
                 </h3>
 
-                {/* Panel. The `hidden` attribute loses to Tailwind's .flex on
-                    equal specificity, so visibility is driven by the class. */}
+                {/* Panel. Mobile animates open by tweening grid-template-rows
+                    from 0fr to 1fr, which slides to the content's natural
+                    height — the previous display toggle snapped with no motion.
+                    `inert` keeps the collapsed CTA out of the tab order. */}
                 <div
                   id={`dossier-panel-${area.id}`}
-                  className={
-                    isOpen
-                      ? 'flex flex-1 flex-col gap-5 px-5 pb-6 lg:px-7 lg:pb-7 lg:pt-3'
-                      : 'hidden'
-                  }
+                  inert={isOpen ? undefined : ''}
+                  className={`grid transition-[grid-template-rows] duration-500 ease-out lg:block lg:transition-none ${
+                    isOpen ? 'grid-rows-[1fr] lg:flex-1' : 'grid-rows-[0fr] lg:hidden'
+                  }`}
                 >
+                  {/* The clipping layer the grid row animates against */}
+                  <div className="overflow-hidden lg:h-full">
+                   <div className="flex flex-col gap-5 px-5 pb-6 pt-1 lg:px-7 lg:pb-7 lg:pt-3 lg:h-full">
                   <div className="flex flex-wrap items-center gap-3">
                     {/* Mobile already shows the title in the accordion row */}
                     <span className="hidden lg:inline font-serif text-3xl text-ivory">
@@ -286,6 +321,8 @@ export default function PracticeAreas() {
                     <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
                     <span>Falar sobre {area.matter.toLowerCase()}</span>
                   </a>
+                   </div>
+                  </div>
                 </div>
               </article>
             );
