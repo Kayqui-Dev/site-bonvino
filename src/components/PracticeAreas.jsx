@@ -126,7 +126,7 @@ export default function PracticeAreas() {
 
   const getWhatsAppUrl = (title) => {
     const text = encodeURIComponent(
-      `Olá! Gostaria de consultar o Dr. Leandro sobre a área de *${title}* no escritório da Av. Paulista.`
+      `Olá! Gostaria de consultar o escritório Bonvino & Pereira sobre a área de *${title}* na Av. Paulista.`
     );
     return `https://wa.me/551191737691?text=${text}`;
   };

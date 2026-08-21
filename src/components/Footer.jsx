@@ -19,7 +19,7 @@ export default function Footer() {
             <div className="space-y-1.5 text-[11px] font-mono text-platinum bg-platinum/10 p-3 rounded-2xl border border-platinum/20">
               <div className="flex items-center gap-1.5 font-bold">
                 <ShieldCheck className="w-4 h-4" />
-                <span>OAB/SP • Titular Leandro Sousa Bonvino</span>
+                <span>OAB/SP • Leandro S. Bonvino e Denilson Pereira</span>
               </div>
               <p className="text-ivory-muted">Razão Social: Bonvino Sociedade Individual de Advocacia</p>
               <p className="text-ivory-muted">CNPJ: 65.949.614/0001-60</p>

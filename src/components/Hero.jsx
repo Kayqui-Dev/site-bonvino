@@ -133,7 +133,7 @@ export default function Hero() {
       {/* ---------- Background: real courthouse presence ---------- */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/brand/dr-leandro-tribunal.jpg"
+          src="/brand/socio-denilson-pereira.jpg"
           alt=""
           aria-hidden="true"
           className="w-full h-full object-cover object-[65%_25%] sm:object-[70%_20%] ken-burns filter brightness-[0.42] contrast-110 saturate-[0.5]"
@@ -189,7 +189,7 @@ export default function Hero() {
         <div className="hero-animate pt-8 mt-8 border-t border-platinum/12 flex flex-wrap items-center gap-6 sm:gap-10 text-ivory-muted text-xs font-mono uppercase">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-platinum" />
-            <span>OAB/SP • Titular Leandro Bonvino</span>
+            <span>OAB/SP • Bonvino &amp; Pereira</span>
           </div>
           <div className="flex items-center gap-2">
             <Award className="w-4 h-4 text-platinum" />
