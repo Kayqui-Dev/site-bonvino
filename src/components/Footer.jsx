@@ -73,13 +73,17 @@ export default function Footer() {
 
             <div className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-platinum shrink-0" />
-              <a href="mailto:bonvinoconsultoria@outlook.com" className="hover:text-platinum">
+              <a
+                href="mailto:bonvinoconsultoria@outlook.com"
+                className="hover:text-platinum break-all min-w-0"
+              >
                 bonvinoconsultoria@outlook.com
               </a>
             </div>
 
-            {/* Active System Indicator */}
-            <div className="pt-2 flex items-center justify-between">
+            {/* Active System Indicator. Wraps because at tablet widths the pill
+                plus the handle pushed the page 22px sideways. */}
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
               <div className="inline-flex items-center gap-2 bg-navy-elevated px-3 py-1.5 rounded-full border border-white/10 text-[10px]">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                 <span className="text-emerald-400 font-bold tracking-wider">SISTEMA ATIVO</span>
