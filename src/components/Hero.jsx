@@ -132,11 +132,13 @@ export default function Hero() {
 
       {/* ---------- Background: real courthouse presence ---------- */}
       <div className="absolute inset-0 z-0">
+        {/* The two partners together — a landscape frame, unlike the portraits
+            in the Sobre section, so it fills this wide band without stretching. */}
         <img
-          src="/brand/socio-denilson-pereira.jpg"
+          src="/brand/socios-bonvino-pereira.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-[65%_25%] sm:object-[70%_20%] ken-burns filter brightness-[0.42] contrast-110 saturate-[0.5]"
+          className="w-full h-full object-cover object-[60%_22%] sm:object-[65%_18%] ken-burns filter brightness-[0.42] contrast-110 saturate-[0.5]"
         />
         {/* Navy grade so the photo reads as brand, not stock */}
         <div className="absolute inset-0 bg-navy-deep/35 mix-blend-color" />

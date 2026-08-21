@@ -14,23 +14,18 @@ const partners = [
     name: 'Dr. Leandro Sousa Bonvino',
     role: 'Sócio fundador',
     photo: '/brand/socio-leandro-bonvino.jpg',
-    // Studio portrait, already framed head-and-shoulders — no correction needed.
-    imgStyle: { objectPosition: 'center top' },
+    // Seated studio portrait, 2:3. The container is 4:5, so cover trims height
+    // only — biasing upward keeps the face and drops the empty lower frame.
+    imgStyle: { objectPosition: 'center 18%' },
     bio: 'Com mais de 10 anos de experiência na advocacia contenciosa e consultiva, construiu uma trajetória pautada na ética inegociável, rigor acadêmico e resultados expressivos em demandas cíveis, trabalhistas e empresariais.',
   },
   {
     name: 'Dr. Denilson Pereira',
     role: 'Sócio fundador',
     photo: '/brand/socio-denilson-pereira.jpg',
-    // Full-length shot in a wide lobby: the figure is only ~14% of the frame
-    // width, centred at 46.3% with the head starting at 42.8% height (measured
-    // off the pixels). Both photos are already 3:4, so object-position alone
-    // does nothing — the zoom is what actually reframes it to match Leandro's
-    // tighter portrait.
-    imgStyle: {
-      transform: 'scale(2) translate(-3.4%, -10.8%)',
-      transformOrigin: 'center center',
-    },
+    // Same framing as Leandro's, so no corrective zoom is needed any more —
+    // the old lobby shot that required it has been replaced.
+    imgStyle: { objectPosition: 'center 18%' },
     bio: 'Sócio fundador do escritório, dedica-se à condução estratégica de processos e ao acompanhamento direto de cada cliente, sustentando o mesmo compromisso com técnica e discrição que define a banca.',
   },
 ];
@@ -68,9 +63,10 @@ export default function AboutPartners() {
                   className="w-full h-full object-cover"
                 />
 
-                {/* Navy grade so both photos read as one brand system */}
-                <div className="absolute inset-0 bg-navy-deep/20 mix-blend-color pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/20 to-transparent pointer-events-none" />
+                {/* Light navy grade only — a heavier blend would wash out the
+                    rose of Leandro's suit, which is a real brand detail. */}
+                <div className="absolute inset-0 bg-navy-deep/10 mix-blend-color pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/15 to-transparent pointer-events-none" />
 
                 {/* Identity plate */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 space-y-1">
