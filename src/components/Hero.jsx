@@ -1,6 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MessageCircle, ArrowDownRight, ShieldCheck, MapPin, Award, Gavel } from 'lucide-react';
+import { MessageCircle, ArrowUpRight, Gavel } from 'lucide-react';
 import gsap from 'gsap';
+
+const AREAS = [
+  'Direito Criminal',
+  'Direito Civil',
+  'Direito Trabalhista',
+  'Direito de Família',
+  'Direito Empresarial',
+  'Direito do Consumidor',
+];
 
 export default function Hero() {
   const heroRef = useRef(null);
@@ -10,7 +19,6 @@ export default function Hero() {
   const ringRef = useRef(null);
   const stageRef = useRef(null);
 
-  // Overlay is skipped entirely for reduced-motion users.
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
@@ -20,8 +28,8 @@ export default function Hero() {
       const revealContent = () =>
         gsap.fromTo(
           '.hero-animate',
-          { opacity: 0, y: 34 },
-          { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out' }
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.09, ease: 'power3.out' }
         );
 
       if (reduced) {
@@ -33,49 +41,38 @@ export default function Hero() {
 
       const tl = gsap.timeline({ onComplete: () => setIntroDone(true) });
 
-      // 1. The gavel rears back, then strikes.
       tl.set(gavelRef.current, { rotate: -42, y: -26, opacity: 0, transformOrigin: '85% 85%' })
-        .set(monogramRef.current, { opacity: 0, scale: 0.82 })
+        .set(monogramRef.current, { opacity: 0, scale: 0.86 })
         .set(ringRef.current, { opacity: 0, scale: 0.2 })
-        .to(gavelRef.current, { opacity: 1, duration: 0.35, ease: 'power2.out' })
-        .to(gavelRef.current, {
-          rotate: 4,
-          y: 0,
-          duration: 0.24,
-          ease: 'power4.in',
-        })
+        .to(gavelRef.current, { opacity: 1, duration: 0.32, ease: 'power2.out' })
+        .to(gavelRef.current, { rotate: 4, y: 0, duration: 0.22, ease: 'power4.in' })
 
-        // 2. Impact — the stage reverberates and a shockwave spreads.
         .add(() => {
           gsap.fromTo(
             stageRef.current,
             { y: 0 },
-            { y: 6, duration: 0.07, yoyo: true, repeat: 3, ease: 'power2.inOut' }
+            { y: 5, duration: 0.07, yoyo: true, repeat: 3, ease: 'power2.inOut' }
           );
         })
-        .to(ringRef.current, {
-          opacity: 0.8,
-          scale: 3.1,
-          duration: 1.05,
-          ease: 'expo.out',
-          onComplete: () => gsap.set(ringRef.current, { opacity: 0 }),
-        }, '<')
+        .to(
+          ringRef.current,
+          {
+            opacity: 0.75,
+            scale: 3,
+            duration: 1,
+            ease: 'expo.out',
+            onComplete: () => gsap.set(ringRef.current, { opacity: 0 }),
+          },
+          '<'
+        )
+        .to(monogramRef.current, { opacity: 1, scale: 1, duration: 0.7, ease: 'expo.out' }, '<0.05')
+        .to(gavelRef.current, { opacity: 0, y: -18, duration: 0.55, ease: 'power2.inOut' }, '<0.3')
 
-        // 3. The monogram is struck into being.
-        .to(monogramRef.current, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.75,
-          ease: 'expo.out',
-        }, '<0.05')
-        .to(gavelRef.current, { opacity: 0, y: -18, duration: 0.6, ease: 'power2.inOut' }, '<0.3')
-
-        // 4. Curtain lifts into the page.
         .to(overlayRef.current, {
           autoAlpha: 0,
-          duration: 0.9,
+          duration: 0.85,
           ease: 'power2.inOut',
-          delay: 0.35,
+          delay: 0.3,
         })
         .set(overlayRef.current, { display: 'none' })
         .add(revealContent, '<0.25');
@@ -93,7 +90,7 @@ export default function Hero() {
     <section
       id="hero"
       ref={heroRef}
-      className="relative min-h-[100dvh] flex flex-col justify-end overflow-hidden pb-16 pt-32 px-4 sm:px-6 lg:px-12"
+      className="relative min-h-[100dvh] flex items-center overflow-hidden pt-32 pb-16 px-4 sm:px-6 lg:px-12"
     >
       {/* ---------- Gavel strike curtain ---------- */}
       <div
@@ -104,14 +101,12 @@ export default function Hero() {
         <div className="absolute inset-0 vignette-navy" />
 
         <div ref={stageRef} className="relative flex flex-col items-center">
-          {/* Shockwave ring */}
           <div
             ref={ringRef}
             className="absolute w-40 h-40 rounded-full border border-platinum/60"
             style={{ boxShadow: '0 0 60px rgba(195,208,226,0.35)' }}
           />
 
-          {/* Chrome monogram, struck into place */}
           <div
             ref={monogramRef}
             className="font-serif font-bold text-7xl sm:text-9xl tracking-[0.06em] chrome-plate"
@@ -123,93 +118,105 @@ export default function Hero() {
             Bonvino &amp; Pereira
           </div>
 
-          {/* The gavel itself */}
           <div ref={gavelRef} className="absolute -top-24 sm:-top-28">
             <Gavel className="w-16 h-16 sm:w-20 sm:h-20 text-platinum drop-shadow-[0_10px_30px_rgba(30,58,110,0.9)]" />
           </div>
         </div>
       </div>
 
-      {/* ---------- Background: real courthouse presence ---------- */}
-      <div className="absolute inset-0 z-0">
-        {/* The two partners together — a landscape frame, unlike the portraits
-            in the Sobre section, so it fills this wide band without stretching. */}
-        <img
-          src="/brand/socios-bonvino-pereira.jpg"
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover object-[60%_22%] sm:object-[65%_18%] ken-burns filter brightness-[0.42] contrast-110 saturate-[0.5]"
-        />
-        {/* Navy grade so the photo reads as brand, not stock */}
-        <div className="absolute inset-0 bg-navy-deep/35 mix-blend-color" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/85 to-navy/25" />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/55 to-transparent" />
-        <div className="absolute inset-0 vignette-navy opacity-70" />
+      {/* A single quiet field instead of a stack of gradients. The photograph
+          is now a framed subject on the right, not a washed-out backdrop. */}
+      <div className="absolute inset-0 z-0 bg-navy">
+        <div className="absolute inset-0 vignette-navy opacity-60" />
       </div>
 
-      {/* ---------- Content ---------- */}
-      <div className="relative z-10 max-w-4xl space-y-6">
-        <div className="hero-animate inline-flex items-center gap-2 bg-platinum/10 border border-platinum/25 text-platinum px-4 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase backdrop-blur-sm">
-          <MapPin className="w-3.5 h-3.5" />
-          <span>Av. Paulista, 1636 • Sala 103 • Bela Vista, SP</span>
-        </div>
+      {/* ---------- Editorial split ---------- */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        {/* Type column */}
+        <div className="lg:col-span-7 flex flex-col gap-8">
+          <div className="hero-animate flex items-center gap-4">
+            <span className="h-px w-12 bg-platinum/50" />
+            <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.4em] text-platinum">
+              Sociedade de Advogados • OAB/SP
+            </span>
+          </div>
 
-        <div className="hero-animate space-y-2">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold font-sans tracking-tight text-ivory leading-[1.08] text-balance">
-            Defesa jurídica de excelência.
+          {/* Concrete positioning: what they practise and where, with no
+              superlatives. "Excelência / resultados que falam" said nothing. */}
+          <h1 className="font-serif text-ivory text-4xl sm:text-5xl lg:text-[3.65rem] leading-[1.1] tracking-tight text-balance">
+            Advocacia criminal, cível, trabalhista e de família.
           </h1>
-          <div className="text-3xl sm:text-5xl md:text-7xl font-serif italic leading-tight text-platinum-gradient">
-            Resultados que falam.
+
+          <p className="text-ivory-muted text-base sm:text-lg leading-relaxed max-w-xl text-pretty font-light">
+            Escritório presencial na Av. Paulista, 1636, em São Paulo. Mais de 10 anos
+            acompanhando processos do primeiro atendimento à decisão final.
+          </p>
+
+          {/* The practice index earns its place: real navigation, not decoration */}
+          <ul className="hero-animate grid sm:grid-cols-2 gap-x-10 border-t border-platinum/15 pt-1 max-w-xl">
+            {AREAS.map((area) => (
+              <li key={area} className="border-b border-platinum/10">
+                <a
+                  href="#areas"
+                  className="group flex items-center justify-between py-2.5 text-sm text-ivory-muted hover:text-ivory transition-colors"
+                >
+                  <span>{area}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-platinum/40 group-hover:text-platinum transition-colors" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="hero-animate flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 bg-platinum hover:bg-platinum-hover text-navy font-semibold text-xs uppercase tracking-[0.16em] px-7 py-4 rounded-sm transition-colors"
+            >
+              <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
+              <span>Falar com advogado</span>
+            </a>
+
+            <a
+              href="#sobre"
+              className="inline-flex items-center gap-2 text-platinum hover:text-ivory text-xs uppercase tracking-[0.16em] font-semibold transition-colors"
+            >
+              <span>Conhecer os sócios</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
-        <p className="hero-animate text-ivory-muted text-base sm:text-xl max-w-2xl font-light leading-relaxed text-pretty">
-          Mais de 10 anos de experiência defendendo patrimônios e direitos com alto rigor técnico.
-          Atendimento presencial exclusivo no coração financeiro de São Paulo.
-        </p>
+        {/* Photo column — the partners as a visible subject, with a documentary
+            caption plate. Squared frame and a platinum hairline, no gradient wash. */}
+        <figure className="hero-animate lg:col-span-5 relative m-0">
+          <div className="relative overflow-hidden rounded-sm border border-platinum/25 shadow-2xl shadow-navy-deep/50">
+            <img
+              src="/brand/socios-bonvino-pereira.jpg"
+              alt="Os sócios Denilson Pereira e Leandro Sousa Bonvino no escritório"
+              className="w-full h-full object-cover aspect-[4/3] lg:aspect-[4/5] object-[58%_20%]"
+            />
+            {/* Only enough scrim to seat the caption — the faces stay clear */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-navy via-navy/70 to-transparent" />
 
-        <div className="hero-animate flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-3 bg-platinum hover:bg-platinum-hover text-navy font-bold text-xs uppercase tracking-[0.18em] px-8 py-4 rounded-full btn-magnetic shadow-xl shadow-navy-deep/50"
-          >
-            <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
-            <span>Falar com Advogado</span>
-          </a>
-
-          <a
-            href="#areas"
-            className="inline-flex items-center justify-center gap-2 border border-platinum/30 hover:border-platinum text-platinum hover:bg-platinum/10 font-semibold text-xs uppercase tracking-[0.18em] px-8 py-4 rounded-full transition-all"
-          >
-            <span>Áreas de Atuação</span>
-            <ArrowDownRight className="w-4 h-4" />
-          </a>
-        </div>
-
-        <div className="hero-animate pt-8 mt-8 border-t border-platinum/12 flex flex-wrap items-center gap-6 sm:gap-10 text-ivory-muted text-xs font-mono uppercase">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-platinum" />
-            <span>OAB/SP • Bonvino &amp; Pereira</span>
+            <figcaption className="absolute bottom-0 left-0 right-0 p-5">
+              {/* Named left-to-right, as a photo caption should read */}
+              <span className="block font-serif text-ivory text-sm sm:text-base leading-snug">
+                Denilson Pereira (à esq.) e Leandro S. Bonvino
+              </span>
+              <span className="block text-[10px] font-mono uppercase tracking-[0.28em] text-platinum mt-1.5">
+                Sócios • Av. Paulista, 1636
+              </span>
+            </figcaption>
           </div>
-          <div className="flex items-center gap-2">
-            <Award className="w-4 h-4 text-platinum" />
-            <span>10+ Anos de Carreira</span>
-          </div>
-        </div>
+        </figure>
       </div>
 
-      {/* Scroll cue — pinned to the right edge so it clears the badge row */}
       {introDone && (
-        <div className="hidden lg:flex absolute bottom-16 right-10 z-10 flex-col items-center gap-3 animate-float">
-          <span
-            className="text-[9px] font-mono uppercase tracking-[0.35em] text-ivory-dim"
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Role
-          </span>
-          <div className="w-px h-10 bg-gradient-to-b from-platinum/60 to-transparent" />
+        <div className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-2">
+          <span className="text-[9px] font-mono uppercase tracking-[0.35em] text-ivory-dim">Role</span>
+          <span className="w-px h-8 bg-gradient-to-b from-platinum/50 to-transparent" />
         </div>
       )}
     </section>
