@@ -65,6 +65,21 @@
   100% { background-position: 200% center; }
 }
 
+/* Brushed metal as a *surface* (chrome-plate above only clips text) — used for
+   the gavel head and the strike bar in the intro. */
+.chrome-surface {
+  background: linear-gradient(
+    166deg,
+    #6E7D96 0%,
+    #AEBDD2 14%,
+    #F2F7FC 30%,
+    #C3D0E2 46%,
+    #7E8DA6 62%,
+    #DCE6F2 80%,
+    #8B9BB4 100%
+  );
+}
+
 /* Radial vignette helper (bg-radial is not a Tailwind v3 utility) */
 .bg-radial {
   background-image: radial-gradient(ellipse at center, var(--tw-gradient-from, transparent) 0%, var(--tw-gradient-to, #060A16) 100%);
