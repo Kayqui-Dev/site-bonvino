@@ -7,7 +7,7 @@ export default function AboutPartners() {
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-champagne font-mono font-semibold bg-champagne/10 py-1.5 px-4 rounded-full border border-champagne/30">
+          <span className="text-xs uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
             Liderança & Experiência
           </span>
           <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
@@ -16,29 +16,35 @@ export default function AboutPartners() {
         </div>
 
         {/* Card Main */}
-        <div className="glass-obsidian p-8 md:p-12 rounded-3rem border border-champagne/30 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-2xl">
-          {/* Photo Placeholder Column */}
+        <div className="glass-navy p-8 md:p-12 rounded-3rem border border-platinum/30 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-2xl">
+          {/* Photo Column — real studio portrait */}
           <div className="lg:col-span-5 relative">
-            <div className="aspect-[4/5] rounded-2rem bg-gradient-to-b from-obsidian-elevated to-obsidian border-2 border-champagne/30 overflow-hidden flex flex-col items-center justify-center p-6 text-center relative group">
-              {/* Glow */}
-              <div className="absolute inset-0 bg-radial from-champagne/15 to-transparent pointer-events-none" />
+            <div className="aspect-[4/5] rounded-2rem overflow-hidden border border-platinum/25 relative group shadow-2xl shadow-navy-deep/40">
+              <img
+                src="/brand/dr-leandro-retrato.jpg"
+                alt="Dr. Leandro Sousa Bonvino, titular do escritório"
+                className="w-full h-full object-cover object-top transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+              />
 
-              <div className="w-24 h-24 rounded-full bg-obsidian border-2 border-champagne flex items-center justify-center mb-4 shadow-2xl">
-                <span className="font-serif text-3xl font-bold text-champagne">LB</span>
-              </div>
+              {/* Navy grade + bottom scrim for the caption */}
+              <div className="absolute inset-0 bg-navy-deep/20 mix-blend-color pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/25 to-transparent pointer-events-none" />
 
-              <div className="space-y-1 z-10">
-                <span className="text-xs font-mono uppercase text-champagne tracking-widest block font-semibold">
-                  [FOTO DR. LEANDRO]
+              {/* Identity plate */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 space-y-1">
+                <h3 className="text-xl font-serif font-bold text-ivory">
+                  Dr. Leandro Sousa Bonvino
+                </h3>
+                <span className="text-[11px] text-platinum font-mono block tracking-wider uppercase">
+                  Titular • OAB/SP
                 </span>
-                <h3 className="text-xl font-serif font-bold text-ivory">Dr. Leandro Sousa Bonvino</h3>
-                <span className="text-xs text-ivory-muted font-mono block">Titular • OAB/SP nº 123.456</span>
-              </div>
 
-              {/* Location Badge */}
-              <div className="mt-6 bg-obsidian/90 border border-champagne/40 px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-[11px] font-mono text-champagne">
-                <MapPin className="w-3.5 h-3.5" />
-                <span>Sede Av. Paulista, 1636</span>
+                <div className="pt-3">
+                  <div className="inline-flex items-center gap-1.5 bg-navy/80 backdrop-blur-sm border border-platinum/30 px-3.5 py-1.5 rounded-full text-[11px] font-mono text-platinum">
+                    <MapPin className="w-3.5 h-3.5" />
+                    <span>Sede Av. Paulista, 1636</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -46,13 +52,13 @@ export default function AboutPartners() {
           {/* Details Column */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-2">
-              <span className="text-xs uppercase tracking-widest text-champagne font-mono font-semibold">
+              <span className="text-xs uppercase tracking-widest text-platinum font-mono font-semibold">
                 Advocacia de Excelência
               </span>
               <h3 className="text-3xl sm:text-4xl font-serif font-bold text-ivory leading-snug">
                 Dr. Leandro Sousa Bonvino
               </h3>
-              <p className="text-xs text-champagne uppercase tracking-wider font-mono">
+              <p className="text-xs text-platinum uppercase tracking-wider font-mono">
                 Titular da Bonvino Sociedade Individual de Advocacia
               </p>
             </div>
@@ -66,8 +72,8 @@ export default function AboutPartners() {
             </p>
 
             {/* Av. Paulista Spotlight Box */}
-            <div className="bg-obsidian-elevated/80 border border-champagne/40 p-5 rounded-2rem flex items-start gap-4">
-              <div className="p-3 rounded-xl bg-champagne/10 text-champagne shrink-0">
+            <div className="bg-navy-elevated/80 border border-platinum/40 p-5 rounded-2rem flex items-start gap-4">
+              <div className="p-3 rounded-xl bg-platinum/10 text-platinum shrink-0">
                 <Building className="w-6 h-6" />
               </div>
               <div className="space-y-1">
@@ -82,16 +88,16 @@ export default function AboutPartners() {
 
             {/* Badges */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-              <div className="bg-obsidian/60 p-3 rounded-xl border border-white/5 text-center">
-                <span className="text-xl font-serif font-bold text-champagne block">10+ Anos</span>
+              <div className="bg-navy/60 p-3 rounded-xl border border-white/5 text-center">
+                <span className="text-xl font-serif font-bold text-platinum block">10+ Anos</span>
                 <span className="text-[10px] uppercase font-mono text-ivory-muted">De Experiência</span>
               </div>
-              <div className="bg-obsidian/60 p-3 rounded-xl border border-white/5 text-center">
-                <span className="text-xl font-serif font-bold text-champagne block">1000+</span>
+              <div className="bg-navy/60 p-3 rounded-xl border border-white/5 text-center">
+                <span className="text-xl font-serif font-bold text-platinum block">1000+</span>
                 <span className="text-[10px] uppercase font-mono text-ivory-muted">Casos Atendidos</span>
               </div>
-              <div className="bg-obsidian/60 p-3 rounded-xl border border-white/5 text-center col-span-2 sm:col-span-1">
-                <span className="text-xl font-serif font-bold text-champagne block">Sigilo</span>
+              <div className="bg-navy/60 p-3 rounded-xl border border-white/5 text-center col-span-2 sm:col-span-1">
+                <span className="text-xl font-serif font-bold text-platinum block">Sigilo</span>
                 <span className="text-[10px] uppercase font-mono text-ivory-muted">Absoluto OAB</span>
               </div>
             </div>

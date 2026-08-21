@@ -12,7 +12,7 @@ export default function WhatsAppFloat() {
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
       {showTooltip && (
-        <div className="relative mb-3 bg-obsidian-elevated text-ivory text-xs font-mono py-2 px-3.5 rounded-xl border border-champagne/40 shadow-2xl flex items-center gap-2 max-w-xs animate-fade-in">
+        <div className="relative mb-3 bg-navy-elevated text-ivory text-xs font-mono py-2 px-3.5 rounded-xl border border-platinum/40 shadow-2xl flex items-center gap-2 max-w-xs animate-fade-in">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
           <span>Fale com um advogado agora</span>
           <button
@@ -22,7 +22,7 @@ export default function WhatsAppFloat() {
           >
             <X className="w-3 h-3" />
           </button>
-          <div className="absolute -bottom-1.5 right-5 w-3 h-3 bg-obsidian-elevated border-r border-b border-champagne/40 transform rotate-45" />
+          <div className="absolute -bottom-1.5 right-5 w-3 h-3 bg-navy-elevated border-r border-b border-platinum/40 transform rotate-45" />
         </div>
       )}
 

@@ -29,7 +29,7 @@ export default function Navbar() {
         className={`max-w-5xl mx-auto rounded-full transition-all duration-300 px-5 sm:px-8 py-3.5 flex items-center justify-between ${
           isScrolled
             ? 'glass-nav shadow-2xl shadow-black/80'
-            : 'bg-obsidian/40 backdrop-blur-md border border-white/5'
+            : 'bg-navy/40 backdrop-blur-md border border-white/5'
         }`}
       >
         {/* Logo */}
@@ -39,16 +39,16 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
-          <a href="#hero" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-champagne link-hover font-medium">
+          <a href="#hero" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-platinum link-hover font-medium">
             Home
           </a>
-          <a href="#areas" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-champagne link-hover font-medium">
+          <a href="#areas" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-platinum link-hover font-medium">
             Áreas de Atuação
           </a>
-          <a href="#sobre" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-champagne link-hover font-medium">
+          <a href="#sobre" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-platinum link-hover font-medium">
             Sobre
           </a>
-          <a href="#contato" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-champagne link-hover font-medium">
+          <a href="#contato" className="text-xs uppercase tracking-wider text-ivory/80 hover:text-platinum link-hover font-medium">
             Contato
           </a>
         </div>
@@ -59,9 +59,9 @@ export default function Navbar() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-champagne hover:bg-champagne-hover text-obsidian font-semibold text-xs tracking-wider uppercase px-5 py-2.5 rounded-full btn-magnetic shadow-lg shadow-champagne/10"
+            className="inline-flex items-center gap-2 bg-platinum hover:bg-platinum-hover text-navy font-semibold text-xs tracking-wider uppercase px-5 py-2.5 rounded-full btn-magnetic shadow-lg shadow-platinum/10"
           >
-            <MessageCircle className="w-4 h-4 fill-obsidian stroke-none" />
+            <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
             <span>Falar com Advogado</span>
           </a>
         </div>
@@ -72,14 +72,14 @@ export default function Navbar() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-full bg-champagne text-obsidian"
+            className="p-2 rounded-full bg-platinum text-navy"
             aria-label="WhatsApp"
           >
-            <MessageCircle className="w-4 h-4 fill-obsidian" />
+            <MessageCircle className="w-4 h-4 fill-navy" />
           </a>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 text-ivory-muted hover:text-champagne"
+            className="p-2 text-ivory-muted hover:text-platinum"
             aria-label="Menu"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -89,7 +89,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="md:hidden mt-2 max-w-5xl mx-auto glass-obsidian rounded-2rem p-6 space-y-4 shadow-2xl">
+        <div className="md:hidden mt-2 max-w-5xl mx-auto glass-navy rounded-2rem p-6 space-y-4 shadow-2xl">
           <a
             href="#hero"
             onClick={() => setMobileOpen(false)}
@@ -123,9 +123,9 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileOpen(false)}
-            className="w-full flex items-center justify-center gap-2 bg-champagne text-obsidian font-bold text-xs uppercase tracking-wider py-3 rounded-full text-center mt-4"
+            className="w-full flex items-center justify-center gap-2 bg-platinum text-navy font-bold text-xs uppercase tracking-wider py-3 rounded-full text-center mt-4"
           >
-            <MessageCircle className="w-4 h-4 fill-obsidian" />
+            <MessageCircle className="w-4 h-4 fill-navy" />
             <span>Falar com Advogado</span>
           </a>
         </div>

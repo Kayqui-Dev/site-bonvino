@@ -20,9 +20,9 @@ export default function SchedulerPattern() {
   }, []);
 
   return (
-    <div className="bg-obsidian/90 border border-champagne/30 rounded-xl p-4 space-y-3">
+    <div className="bg-navy/90 border border-platinum/30 rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between text-xs font-mono">
-        <span className="flex items-center gap-1.5 text-champagne font-semibold">
+        <span className="flex items-center gap-1.5 text-platinum font-semibold">
           <Calendar className="w-3.5 h-3.5" />
           <span>Protocol Scheduler • Agenda Av. Paulista</span>
         </span>
@@ -44,13 +44,13 @@ export default function SchedulerPattern() {
                 key={`${dIdx}-${sIdx}`}
                 className={`py-1 rounded border transition-all duration-300 relative ${
                   isSelected
-                    ? 'bg-champagne text-obsidian font-bold border-champagne scale-105 shadow-md shadow-champagne/30'
-                    : 'bg-obsidian-card/60 border-white/5 text-ivory-muted'
+                    ? 'bg-platinum text-navy font-bold border-platinum scale-105 shadow-md shadow-platinum/30'
+                    : 'bg-navy-card/60 border-white/5 text-ivory-muted'
                 }`}
               >
                 {s}
                 {isSelected && (
-                  <MousePointer className="w-3 h-3 text-obsidian absolute -bottom-1 -right-1 fill-obsidian animate-bounce" />
+                  <MousePointer className="w-3 h-3 text-navy absolute -bottom-1 -right-1 fill-navy animate-bounce" />
                 )}
               </div>
             );

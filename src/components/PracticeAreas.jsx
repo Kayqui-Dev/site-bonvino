@@ -136,7 +136,7 @@ export default function PracticeAreas() {
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-champagne font-mono font-semibold bg-champagne/10 py-1.5 px-4 rounded-full border border-champagne/30">
+          <span className="text-xs uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
             Especialidades Jurídicas
           </span>
           <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
@@ -154,15 +154,15 @@ export default function PracticeAreas() {
             return (
               <div
                 key={item.id}
-                className="practice-card glass-obsidian p-8 rounded-2rem flex flex-col justify-between space-y-6 group"
+                className="practice-card glass-navy p-8 rounded-2rem flex flex-col justify-between space-y-6 group"
               >
                 <div className="space-y-6">
                   {/* Top Bar */}
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-xl bg-champagne/10 border border-champagne/30 flex items-center justify-center text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-platinum/10 border border-platinum/30 flex items-center justify-center text-platinum group-hover:bg-platinum group-hover:text-navy transition-colors">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[11px] font-mono text-champagne bg-champagne/10 border border-champagne/30 px-3 py-1 rounded-full">
+                    <span className="text-[11px] font-mono text-platinum bg-platinum/10 border border-platinum/30 px-3 py-1 rounded-full">
                       {item.badge}
                     </span>
                   </div>
@@ -191,7 +191,7 @@ export default function PracticeAreas() {
                     href={getWhatsAppUrl(item.title)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-obsidian-elevated hover:bg-champagne text-ivory hover:text-obsidian text-xs font-semibold uppercase tracking-wider py-3.5 px-4 rounded-xl border border-white/10 hover:border-champagne transition-all duration-300"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-navy-elevated hover:bg-platinum text-ivory hover:text-navy text-xs font-semibold uppercase tracking-wider py-3.5 px-4 rounded-xl border border-white/10 hover:border-platinum transition-all duration-300"
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>Consultar Especialista</span>

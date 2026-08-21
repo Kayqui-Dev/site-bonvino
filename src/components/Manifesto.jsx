@@ -37,7 +37,7 @@ export default function Manifesto() {
   return (
     <section
       ref={manifestoRef}
-      className="relative py-32 px-4 sm:px-6 lg:px-12 bg-obsidian border-y border-champagne/20 overflow-hidden"
+      className="relative py-32 px-4 sm:px-6 lg:px-12 bg-navy border-y border-platinum/20 overflow-hidden"
     >
       {/* Dark Marble Texture Parallax Background */}
       <div className="absolute inset-0 z-0 opacity-15">
@@ -46,11 +46,11 @@ export default function Manifesto() {
           alt="Textura Mármore Luxo"
           className="w-full h-full object-cover filter contrast-200"
         />
-        <div className="absolute inset-0 bg-obsidian/80" />
+        <div className="absolute inset-0 bg-navy/80" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
-        <span className="text-xs uppercase tracking-[0.3em] text-champagne font-mono font-semibold bg-champagne/10 py-1.5 px-4 rounded-full border border-champagne/30">
+        <span className="text-xs uppercase tracking-[0.3em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
           Manifesto de Atuação
         </span>
 
@@ -60,18 +60,18 @@ export default function Manifesto() {
         </p>
 
         {/* Massive Playfair Display Italic Champagne Text */}
-        <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif italic text-champagne leading-tight font-bold text-balance">
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif italic text-platinum leading-tight font-bold text-balance">
           <span className="word-reveal inline-block mr-3">Nós</span>
           <span className="word-reveal inline-block mr-3">focamos</span>
           <span className="word-reveal inline-block mr-3">em</span>
           <br className="hidden sm:inline" />
           <span className="word-reveal inline-block mr-3 text-ivory">RESULTADOS</span>
           <span className="word-reveal inline-block mr-3 text-ivory">QUE</span>
-          <span className="word-reveal inline-block mr-3 underline decoration-champagne/50 underline-offset-8">TRANSFORMAM</span>
+          <span className="word-reveal inline-block mr-3 underline decoration-platinum/50 underline-offset-8">TRANSFORMAM</span>
           <span className="word-reveal inline-block text-ivory">VIDAS.</span>
         </h2>
 
-        <div className="pt-6 w-24 h-[2px] bg-champagne mx-auto" />
+        <div className="pt-6 w-24 h-[2px] bg-platinum mx-auto" />
       </div>
     </section>
   );

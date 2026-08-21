@@ -73,7 +73,7 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-champagne font-mono font-semibold bg-champagne/10 py-1.5 px-4 rounded-full border border-champagne/30">
+          <span className="text-xs uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
             Reconhecimento
           </span>
           <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
@@ -90,15 +90,15 @@ export default function Testimonials() {
           onTouchEnd={handleTouchEnd}
         >
           {/* Card */}
-          <div className="glass-obsidian p-8 md:p-14 rounded-3rem border border-champagne/30 relative overflow-hidden transition-all duration-500 min-h-[320px] flex flex-col justify-between shadow-2xl">
+          <div className="glass-navy p-8 md:p-14 rounded-3rem border border-platinum/30 relative overflow-hidden transition-all duration-500 min-h-[320px] flex flex-col justify-between shadow-2xl">
             {/* Giant Champagne Quote Mark */}
-            <Quote className="w-20 h-20 text-champagne/10 absolute -top-2 -left-2 pointer-events-none" />
+            <Quote className="w-20 h-20 text-platinum/10 absolute -top-2 -left-2 pointer-events-none" />
 
             <div className="relative z-10 space-y-6">
               {/* Star Rating */}
               <div className="flex items-center gap-1">
                 {[...Array(testimonials[current].rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-champagne text-champagne" />
+                  <Star key={i} className="w-4 h-4 fill-platinum text-platinum" />
                 ))}
               </div>
 
@@ -112,7 +112,7 @@ export default function Testimonials() {
             <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h4 className="text-ivory font-bold text-base">{testimonials[current].clientName}</h4>
-                <p className="text-xs text-champagne font-mono uppercase tracking-wider mt-0.5">
+                <p className="text-xs text-platinum font-mono uppercase tracking-wider mt-0.5">
                   {testimonials[current].caseType} • <span className="text-emerald-400 font-semibold">{testimonials[current].result}</span>
                 </p>
               </div>
@@ -125,7 +125,7 @@ export default function Testimonials() {
                     onClick={() => setCurrent(idx)}
                     aria-label={`Slide ${idx + 1}`}
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      current === idx ? 'w-8 bg-champagne' : 'w-2 bg-white/20 hover:bg-white/40'
+                      current === idx ? 'w-8 bg-platinum' : 'w-2 bg-white/20 hover:bg-white/40'
                     }`}
                   />
                 ))}
@@ -137,7 +137,7 @@ export default function Testimonials() {
           <button
             onClick={prevSlide}
             aria-label="Anterior"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-obsidian border border-champagne/40 text-ivory hover:text-champagne hover:border-champagne flex items-center justify-center transition-all shadow-xl"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-navy border border-platinum/40 text-ivory hover:text-platinum hover:border-platinum flex items-center justify-center transition-all shadow-xl"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -145,7 +145,7 @@ export default function Testimonials() {
           <button
             onClick={nextSlide}
             aria-label="Próximo"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-obsidian border border-champagne/40 text-ivory hover:text-champagne hover:border-champagne flex items-center justify-center transition-all shadow-xl"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-navy border border-platinum/40 text-ivory hover:text-platinum hover:border-platinum flex items-center justify-center transition-all shadow-xl"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
