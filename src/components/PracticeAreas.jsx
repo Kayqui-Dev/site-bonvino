@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Scale,
   Briefcase,
@@ -6,198 +6,325 @@ import {
   Users,
   Building2,
   ShoppingCart,
-  ArrowRight,
   MessageCircle,
+  Plus,
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ShufflerPattern from './ShufflerPattern';
-import TypewriterPattern from './TypewriterPattern';
-import SchedulerPattern from './SchedulerPattern';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const practiceData = [
+// Copy describes the work performed, never outcomes obtained. The previous
+// badges ("180+ Causas Vitoriosas", "350+ Casos Atendidos") were result and
+// volume claims, which OAB publicity rules do not allow.
+const AREAS = [
+  {
+    id: 'criminal',
+    icon: ShieldCheck,
+    title: 'Direito Criminal',
+    matter: 'Penal',
+    tag: 'Plantão 24h',
+    description:
+      'Atuação tempestiva na defesa dos direitos fundamentais, desde a fase policial até o julgamento.',
+    fronts: [
+      'Habeas corpus e medidas de urgência',
+      'Acompanhamento em flagrante e delegacia',
+      'Inquéritos policiais e ações penais',
+    ],
+  },
   {
     id: 'civil',
     icon: Scale,
     title: 'Direito Civil',
-    badge: '350+ Casos Atendidos',
+    matter: 'Cível',
     description:
-      'Proteção patrimonial, análise e elaboração de contratos complexos, reparações por danos morais e materiais, além de ações de execução e posse.',
-    patternType: 'shuffler',
-    shufflerItems: [
-      { tag: 'FRENTE 1', text: 'Elaboração e Revisão de Contratos de Alta Complexidade' },
-      { tag: 'FRENTE 2', text: 'Reparações por Danos Morais, Materiais e Estéticos' },
-      { tag: 'FRENTE 3', text: 'Ações Possessórias, Usucapião e Direitos Reais' },
+      'Proteção patrimonial e condução de litígios contratuais, indenizatórios e de propriedade.',
+    fronts: [
+      'Elaboração e revisão de contratos',
+      'Reparação por danos morais e materiais',
+      'Ações possessórias e usucapião',
     ],
   },
   {
     id: 'trabalhista',
     icon: Briefcase,
     title: 'Direito Trabalhista',
-    badge: '280+ Processos Concluídos',
+    matter: 'Trabalho',
     description:
-      'Defesa estratégica tanto para empregados em busca de reparação quanto para empresas na adequação preventiva de rotinas trabalhistas e negociações.',
-    patternType: 'shuffler',
-    shufflerItems: [
-      { tag: 'FRENTE 1', text: 'Reclamações Trabalhistas & Rescisões Indiretas' },
-      { tag: 'FRENTE 2', text: 'Defesa Trabalhista Patronal & Auditoria Preventiva' },
-      { tag: 'FRENTE 3', text: 'Acordos Extrajudiciais e Homologação na Justiça' },
-    ],
-  },
-  {
-    id: 'criminal',
-    icon: ShieldCheck,
-    title: 'Direito Criminal',
-    badge: 'Plantão 24/7 Urgências',
-    description:
-      'Atuação tempestiva e técnica na defesa dos direitos fundamentais em inquéritos policiais, prisões preventivas, habeas corpus e processos penais.',
-    patternType: 'typewriter',
-    typewriterLines: [
-      '>> [SOLICITAÇÃO] Habeas Corpus urgente impetrado com sucesso.',
-      '>> [DELEGACIA] Acompanhamento presencial em flagrante 24h.',
-      '>> [INQUÉRITO] Trancamento de ação penal por ausência de justa causa.',
+      'Defesa técnica para empregados e assessoria preventiva para empresas nas rotinas laborais.',
+    fronts: [
+      'Reclamações trabalhistas e rescisão indireta',
+      'Defesa patronal e auditoria preventiva',
+      'Acordos e homologação judicial',
     ],
   },
   {
     id: 'familia',
     icon: Users,
     title: 'Direito de Família',
-    badge: '200+ Famílias Assistidas',
+    matter: 'Família',
     description:
-      'Condução humanizada, discreta e firme em divórcios, partilha de bens, guarda de filhos, fixação de alimentos e inventários sucessórios.',
-    patternType: 'typewriter',
-    typewriterLines: [
-      '>> [DIVÓRCIO] Acordo consensual de partilha de patrimônio homologado.',
-      '>> [GUARDA] Fixação de guarda compartilhada e plano de convivência.',
-      '>> [INVENTÁRIO] Homologação célere de partilha de bens sem litígio.',
+      'Condução discreta e humanizada de questões familiares e sucessórias, judiciais ou consensuais.',
+    fronts: [
+      'Divórcio e partilha de bens',
+      'Guarda, convivência e alimentos',
+      'Inventários e sucessões',
     ],
   },
   {
     id: 'empresarial',
     icon: Building2,
     title: 'Direito Empresarial',
-    badge: '120+ Empresas Assessoradas',
+    matter: 'Empresa',
     description:
-      'Suporte jurídico integral para corporações: reestruturação societária, gestão de riscos contratuais, compliance e proteção dos sócios.',
-    patternType: 'scheduler',
+      'Suporte jurídico continuado para sociedades, da constituição à gestão de riscos do negócio.',
+    fronts: [
+      'Constituição e reestruturação societária',
+      'Gestão de riscos contratuais e compliance',
+      'Conflitos entre sócios',
+    ],
   },
   {
     id: 'consumidor',
     icon: ShoppingCart,
     title: 'Direito do Consumidor',
-    badge: '180+ Causas Vitoriosas',
+    matter: 'Consumidor',
     description:
-      'Repressão jurídica contra práticas abusivas de grandes fornecedores, bancos e planos de saúde com foco no ressarcimento de danos.',
-    patternType: 'scheduler',
+      'Enfrentamento de práticas abusivas de fornecedores, instituições financeiras e planos de saúde.',
+    fronts: [
+      'Práticas e cláusulas abusivas',
+      'Bancos, seguradoras e planos de saúde',
+      'Ressarcimento e repetição de indébito',
+    ],
   },
 ];
 
 export default function PracticeAreas() {
   const sectionRef = useRef(null);
+  const [active, setActive] = useState(0);
+  // Hover-to-open is a mouse affordance. On a touch screen it fired on tap and
+  // fought the tap-to-close toggle below.
+  const hoverable = useRef(false);
+
+  useEffect(() => {
+    hoverable.current = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }, []);
+
+  // On mobile the folders behave like an accordion, so tapping the open one
+  // closes it. The desktop cabinet always keeps one file open, or it would
+  // collapse into six empty spines.
+  const handleSelect = (i) => {
+    const collapsible = window.matchMedia('(max-width: 1023px)').matches;
+    setActive((prev) => (collapsible && prev === i ? -1 : i));
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = sectionRef.current.querySelectorAll('.practice-card');
-      if (cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 45 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 75%',
-            },
-          }
-        );
-      }
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.dossier-item'),
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' },
+        }
+      );
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
-  const getWhatsAppUrl = (title) => {
-    const text = encodeURIComponent(
-      `Olá! Gostaria de consultar o Dr. Leandro sobre a área de *${title}* no escritório da Av. Paulista.`
-    );
-    return `https://wa.me/551191737691?text=${text}`;
+  const getWhatsAppUrl = (title) =>
+    `https://wa.me/551191737691?text=${encodeURIComponent(
+      `Olá! Gostaria de consultar o escritório Bonvino & Pereira sobre a área de *${title}* na Av. Paulista.`
+    )}`;
+
+  // Arrow keys walk the cabinet, as with any composite widget.
+  const onKeyDown = (e, index) => {
+    const last = AREAS.length - 1;
+    let next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = index === last ? 0 : index + 1;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = index === 0 ? last : index - 1;
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End') next = last;
+    if (next === null) return;
+    e.preventDefault();
+    setActive(next);
+    sectionRef.current?.querySelectorAll('.dossier-trigger')[next]?.focus();
   };
 
   return (
     <section id="areas" ref={sectionRef} className="py-24 px-4 sm:px-6 lg:px-12 relative z-10">
-      <div className="max-w-7xl mx-auto space-y-16">
-        {/* Header */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-champagne font-mono font-semibold bg-champagne/10 py-1.5 px-4 rounded-full border border-champagne/30">
-            Especialidades Jurídicas
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
-            Áreas de Atuação
+      <div className="max-w-7xl mx-auto">
+        {/* Header — hairline label, matching the hero, instead of a pill badge */}
+        <div className="flex flex-col gap-5 mb-12 max-w-2xl">
+          <div className="flex items-center gap-4">
+            <span className="h-px w-12 bg-platinum/50" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-platinum">
+              Áreas de atuação
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-serif text-ivory leading-[1.1] text-balance">
+            Selecione a matéria do seu caso.
           </h2>
-          <p className="text-ivory-muted text-base">
-            Soluções jurídicas estratégicas com alto rigor técnico e atendimento exclusivo na Av. Paulista, São Paulo.
+          <p className="text-ivory-muted text-base leading-relaxed text-pretty">
+            Cada pasta reúne as frentes que o escritório conduz naquela área. Abra a
+            que corresponde à sua situação e fale direto com um advogado.
           </p>
         </div>
 
-        {/* Grid 6 Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {practiceData.map((item) => {
-            const Icon = item.icon;
+        {/* ---------- The cabinet ---------- */}
+        <div className="flex flex-col lg:flex-row gap-2.5 lg:h-[29rem]">
+          {AREAS.map((area, i) => {
+            const Icon = area.icon;
+            const isOpen = active === i;
+
             return (
-              <div
-                key={item.id}
-                className="practice-card glass-obsidian p-8 rounded-2rem flex flex-col justify-between space-y-6 group"
+              <article
+                key={area.id}
+                className={`dossier-item relative flex flex-col overflow-hidden rounded-sm border transition-all duration-500 ease-out ${
+                  isOpen
+                    ? 'border-platinum/45 bg-navy-elevated lg:flex-[3.6]'
+                    : 'border-platinum/15 bg-navy-elevated/40 hover:border-platinum/35 hover:bg-navy-elevated/70 lg:flex-[0.42]'
+                }`}
               >
-                <div className="space-y-6">
-                  {/* Top Bar */}
-                  <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-xl bg-champagne/10 border border-champagne/30 flex items-center justify-center text-champagne group-hover:bg-champagne group-hover:text-obsidian transition-colors">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[11px] font-mono text-champagne bg-champagne/10 border border-champagne/30 px-3 py-1 rounded-full">
-                      {item.badge}
+                {/* Chrome edge marks the open file, like a tab standing proud.
+                    Closed folders keep a dim edge on mobile so the column still
+                    reads as a stack of files rather than plain list rows. */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute left-0 top-0 bottom-0 w-[3px] chrome-surface transition-opacity duration-500 z-10 ${
+                    isOpen ? 'opacity-100' : 'opacity-25 lg:opacity-0'
+                  }`}
+                />
+
+                {/* One stable button node across both states, so keyboard focus
+                    survives opening and closing the file. */}
+                <h3 className={`m-0 ${isOpen ? '' : 'lg:flex-1'}`}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(i)}
+                    onMouseEnter={() => hoverable.current && setActive(i)}
+                    // Only keyboard focus opens a file. A tap also focuses the
+                    // button, which would re-open what the tap just closed.
+                    onFocus={(e) => e.target.matches(':focus-visible') && setActive(i)}
+                    onKeyDown={(e) => onKeyDown(e, i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`dossier-panel-${area.id}`}
+                    className="dossier-trigger w-full h-full text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-platinum focus-visible:ring-inset"
+                  >
+                    {/* Mobile: a file tab — matter code, title, and a marker
+                        that turns as the folder opens. */}
+                    <span className="flex lg:hidden items-center gap-3.5 px-5 py-4">
+                      <Icon
+                        className={`w-5 h-5 shrink-0 transition-colors duration-300 ${
+                          isOpen ? 'text-platinum' : 'text-platinum/60'
+                        }`}
+                      />
+                      <span className="flex flex-col flex-1 min-w-0 gap-0.5">
+                        <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-platinum/70">
+                          {area.matter}
+                        </span>
+                        <span className="text-[15px] font-serif text-ivory leading-snug">
+                          {area.title}
+                        </span>
+                      </span>
+                      <Plus
+                        className={`w-4 h-4 shrink-0 transition-transform duration-500 ease-out ${
+                          isOpen ? 'rotate-[135deg] text-platinum' : 'text-platinum/50'
+                        }`}
+                      />
                     </span>
-                  </div>
 
-                  {/* Title & Description */}
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-serif text-ivory font-bold">{item.title}</h3>
-                    <p className="text-xs text-ivory-muted leading-relaxed">{item.description}</p>
-                  </div>
-
-                  {/* Pattern Renderer */}
-                  <div className="pt-2">
-                    {item.patternType === 'shuffler' && (
-                      <ShufflerPattern items={item.shufflerItems} />
+                    {/* Desktop: a vertical spine when filed, a header when open */}
+                    {isOpen ? (
+                      <span className="hidden lg:flex items-center gap-3 px-7 pt-7">
+                        <Icon className="w-5 h-5 text-platinum" />
+                        <span className="text-[10px] font-mono uppercase tracking-[0.32em] text-platinum">
+                          {area.matter}
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="hidden lg:flex flex-col items-center justify-between h-full py-6">
+                        <Icon className="w-5 h-5 text-platinum shrink-0" />
+                        {/* Arbitrary properties: a custom class cannot take a
+                            lg: variant, so the writing mode is set inline. */}
+                        <span className="text-base font-serif text-ivory whitespace-nowrap [writing-mode:vertical-rl] rotate-180">
+                          {area.title}
+                        </span>
+                        <Plus className="w-4 h-4 text-platinum/50 shrink-0" />
+                      </span>
                     )}
-                    {item.patternType === 'typewriter' && (
-                      <TypewriterPattern textLines={item.typewriterLines} />
-                    )}
-                    {item.patternType === 'scheduler' && <SchedulerPattern />}
-                  </div>
-                </div>
+                  </button>
+                </h3>
 
-                {/* Card CTA */}
-                <div className="pt-4 border-t border-white/10">
+                {/* Panel. Mobile animates open by tweening grid-template-rows
+                    from 0fr to 1fr, which slides to the content's natural
+                    height — the previous display toggle snapped with no motion.
+                    `inert` keeps the collapsed CTA out of the tab order. */}
+                <div
+                  id={`dossier-panel-${area.id}`}
+                  inert={isOpen ? undefined : ''}
+                  className={`grid transition-[grid-template-rows] duration-500 ease-out lg:block lg:transition-none ${
+                    isOpen ? 'grid-rows-[1fr] lg:flex-1' : 'grid-rows-[0fr] lg:hidden'
+                  }`}
+                >
+                  {/* The clipping layer the grid row animates against */}
+                  <div className="overflow-hidden lg:h-full">
+                   <div className="flex flex-col gap-5 px-5 pb-6 pt-1 lg:px-7 lg:pb-7 lg:pt-3 lg:h-full">
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Mobile already shows the title in the accordion row */}
+                    <span className="hidden lg:inline font-serif text-3xl text-ivory">
+                      {area.title}
+                    </span>
+                    {area.tag && (
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-navy bg-platinum px-2.5 py-1 rounded-sm">
+                        {area.tag}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-sm text-ivory-muted leading-relaxed max-w-md">
+                    {area.description}
+                  </p>
+
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-platinum pb-2 border-b border-platinum/20">
+                      Frentes conduzidas
+                    </span>
+                    <ul className="flex flex-col">
+                      {area.fronts.map((front) => (
+                        <li
+                          key={front}
+                          className="text-sm text-ivory py-2.5 border-b border-platinum/10 flex items-start gap-3"
+                        >
+                          <span aria-hidden="true" className="text-platinum/60 font-mono text-xs pt-0.5">
+                            —
+                          </span>
+                          <span className="leading-snug">{front}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
                   <a
-                    href={getWhatsAppUrl(item.title)}
+                    href={getWhatsAppUrl(area.title)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-obsidian-elevated hover:bg-champagne text-ivory hover:text-obsidian text-xs font-semibold uppercase tracking-wider py-3.5 px-4 rounded-xl border border-white/10 hover:border-champagne transition-all duration-300"
+                    className="btn-magnetic mt-auto inline-flex items-center justify-center gap-2.5 bg-platinum hover:bg-platinum-hover text-navy text-xs font-semibold uppercase tracking-[0.16em] py-3.5 px-5 rounded-sm self-start"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Consultar Especialista</span>
+                    <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
+                    <span>Falar sobre {area.matter.toLowerCase()}</span>
                   </a>
+                   </div>
+                  </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

@@ -27,9 +27,9 @@ export default function TypewriterPattern({ textLines = [] }) {
   }, [charIndex, lineIndex, textLines]);
 
   return (
-    <div className="bg-obsidian/90 border border-champagne/30 rounded-xl p-4 font-mono text-xs space-y-2">
+    <div className="bg-navy/90 border border-platinum/30 rounded-xl p-4 font-mono text-xs space-y-2">
       <div className="flex items-center justify-between text-[11px] text-ivory-muted border-b border-white/10 pb-2">
-        <span className="flex items-center gap-1.5 text-champagne font-semibold">
+        <span className="flex items-center gap-1.5 text-platinum font-semibold">
           <Terminal className="w-3.5 h-3.5" />
           <span>Telemetry Feed • Casos Atendidos</span>
         </span>
@@ -38,7 +38,7 @@ export default function TypewriterPattern({ textLines = [] }) {
 
       <div className="min-h-[48px] text-ivory flex items-center">
         <span>{displayText}</span>
-        <span className="inline-block w-2 h-4 bg-champagne ml-1 animate-pulse" />
+        <span className="inline-block w-2 h-4 bg-platinum ml-1 animate-pulse" />
       </div>
     </div>
   );

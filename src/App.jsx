@@ -8,10 +8,11 @@ import Testimonials from './components/Testimonials';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import WhatsAppFloat from './components/WhatsAppFloat';
+import Reveal from './components/Reveal';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-obsidian text-ivory flex flex-col font-sans selection:bg-champagne selection:text-obsidian">
+    <div className="min-h-screen bg-navy text-ivory flex flex-col font-sans selection:bg-platinum selection:text-navy">
       {/* Floating Pill Navbar */}
       <Navbar />
 
@@ -19,10 +20,19 @@ export default function App() {
       <main className="flex-grow">
         <Hero />
         <PracticeAreas />
-        <AboutPartners />
-        <Manifesto />
-        <Testimonials />
-        <ContactSection />
+        {/* Alternating slide reveals give the scroll a deliberate rhythm */}
+        <Reveal from="right">
+          <AboutPartners />
+        </Reveal>
+        <Reveal from="left">
+          <Manifesto />
+        </Reveal>
+        <Reveal from="right">
+          <Testimonials />
+        </Reveal>
+        <Reveal from="left">
+          <ContactSection />
+        </Reveal>
       </main>
 
       {/* Footer */}
