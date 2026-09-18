@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import Logo from './Logo';
+import { getWhatsAppUrl } from '../site';
 
 const FACTS = [
   { label: 'Sede', value: 'Av. Paulista, 1636' },
@@ -25,8 +22,6 @@ export default function Hero() {
   const monoRef = useRef(null);
   const wordmarkRef = useRef(null);
   const sparkRefs = useRef([]);
-  const frameRef = useRef(null);
-  const imgRef = useRef(null);
 
   const [introDone, setIntroDone] = useState(false);
 
@@ -51,7 +46,7 @@ export default function Hero() {
       if (reduced) {
         gsap.set(overlayRef.current, { autoAlpha: 0, display: 'none' });
         setIntroDone(true);
-        revealContent();
+        gsap.set('.hero-animate', { opacity: 1, y: 0 });
         return;
       }
 
@@ -128,64 +123,11 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  // Depth on the portrait. Pointer parallax only exists for a mouse, so touch
-  // screens were getting a completely static image — they get scroll parallax
-  // inside the frame instead.
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-
-    const ctx = gsap.context(() => {
-      if (imgRef.current) {
-        // Slightly oversized so shifting it never exposes the frame edge.
-        gsap.fromTo(
-          imgRef.current,
-          { yPercent: -5, scale: 1.12 },
-          {
-            yPercent: 5,
-            scale: 1.12,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: frameRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        );
-      }
-    }, heroRef);
-
-    let cleanupPointer;
-    if (window.matchMedia('(pointer: fine)').matches && frameRef.current) {
-      const xTo = gsap.quickTo(frameRef.current, 'x', { duration: 0.9, ease: 'power3.out' });
-      const yTo = gsap.quickTo(frameRef.current, 'y', { duration: 0.9, ease: 'power3.out' });
-      const onMove = (e) => {
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        xTo(((e.clientX - cx) / cx) * -14);
-        yTo(((e.clientY - cy) / cy) * -10);
-      };
-      window.addEventListener('pointermove', onMove);
-      cleanupPointer = () => window.removeEventListener('pointermove', onMove);
-    }
-
-    return () => {
-      ctx.revert();
-      cleanupPointer?.();
-    };
-  }, []);
-
-  const whatsappMessage = encodeURIComponent(
-    'Olá, gostaria de agendar uma consulta jurídica no escritório da Av. Paulista.'
-  );
-  const whatsappUrl = `https://wa.me/551191737691?text=${whatsappMessage}`;
-
   return (
     <section
       id="hero"
       ref={heroRef}
-      className="relative min-h-[100dvh] flex items-center overflow-hidden pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-12"
+      className="relative min-h-[100svh] flex items-center overflow-hidden pt-36 pb-24 px-5 sm:px-8 lg:px-12"
     >
       {/* ---------- Intro: the gavel engraves the monogram ---------- */}
       <div
@@ -214,11 +156,8 @@ export default function Hero() {
           ))}
 
           <div className="relative">
-            <div
-              ref={monoRef}
-              className="font-serif font-bold text-8xl sm:text-9xl tracking-[0.06em] chrome-plate"
-            >
-              BP
+            <div ref={monoRef}>
+              <Logo size="hero" />
             </div>
 
             {/* The struck line: flashes along the monogram's midline */}
@@ -245,7 +184,7 @@ export default function Hero() {
 
           <div
             ref={wordmarkRef}
-            className="mt-6 text-[10px] sm:text-xs font-mono uppercase text-platinum-dim whitespace-nowrap"
+            className="mt-6 text-sm font-sans uppercase text-platinum whitespace-nowrap"
           >
             Bonvino &amp; Pereira
           </div>
@@ -257,89 +196,61 @@ export default function Hero() {
         <div className="absolute inset-0 vignette-navy opacity-60" />
       </div>
 
-      {/* ---------- Editorial split ----------
-          Mobile follows DOM order, which puts the portrait straight after the
-          headline: it is the hero asset and used to sit entirely below the
-          fold. Desktop places the same nodes explicitly into two columns. */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-x-16 lg:gap-y-7 lg:items-center">
-        <div className="hero-animate flex items-center gap-4 lg:col-start-1 lg:col-span-7 lg:row-start-1">
-          <span className="h-px w-10 sm:w-12 bg-platinum/50" />
-          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.3em] sm:tracking-[0.4em] text-platinum">
-            Sociedade de Advogados • OAB/SP
-          </span>
-        </div>
-
-        {/* Mixed weight so the headline has a focal point instead of one flat
-            block of serif at a single size. */}
-        {/* 4xl is the largest size where "Quando o processo" still holds one
-            line at 378px — bigger and the explicit line breaks fall apart. */}
-        <h1 className="hero-animate font-serif text-ivory text-4xl sm:text-5xl lg:text-[4rem] leading-[1.06] tracking-tight text-balance lg:col-start-1 lg:col-span-7 lg:row-start-2">
-          Quando o processo
-          <br />
-          <span className="italic text-platinum">decide um rumo</span>
-          <br />
-          da sua vida.
-        </h1>
-
-        <figure className="hero-animate relative m-0 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-5 lg:self-center">
-          <div
-            ref={frameRef}
-            className="relative overflow-hidden rounded-sm border border-platinum/25 shadow-2xl shadow-navy-deep/50"
-          >
-            <img
-              ref={imgRef}
-              src="/brand/socios-bonvino-pereira.jpg"
-              alt="Os sócios Denilson Pereira e Leandro Sousa Bonvino no escritório"
-              className="w-full h-full object-cover aspect-[16/10] lg:aspect-[4/5] object-[56%_18%]"
-            />
-            <div className="absolute inset-x-0 bottom-0 h-28 sm:h-32 bg-gradient-to-t from-navy via-navy/70 to-transparent" />
-
-            <figcaption className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-              <span className="block font-serif text-ivory text-sm sm:text-base leading-snug">
-                Denilson Pereira (à esq.) e Leandro S. Bonvino
-              </span>
-              <span className="block text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.22em] sm:tracking-[0.28em] text-platinum mt-1.5">
-                Sócios • Av. Paulista, 1636
-              </span>
-            </figcaption>
+      {/* ---------- Institutional opening ---------- */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto text-center">
+        <div className="flex flex-col items-center gap-8">
+          <div className="hero-animate flex flex-col items-center gap-2">
+            <span className="font-sans text-sm uppercase tracking-[0.24em] text-platinum sm:tracking-[0.35em]">
+              Bonvino &amp; Pereira
+            </span>
+            <span className="font-sans text-sm tracking-wide text-ivory-muted">
+              Sociedade de Advogados
+            </span>
           </div>
-        </figure>
 
-        <p className="hero-animate text-ivory-muted text-base sm:text-lg leading-relaxed max-w-lg text-pretty font-light lg:col-start-1 lg:col-span-7 lg:row-start-3">
-          Advocacia criminal, cível, trabalhista e de família em São Paulo. Mais de
-          10 anos acompanhando processos do primeiro atendimento à decisão final.
-        </p>
+          {/* Mixed weight so the headline has a focal point instead of one flat
+              block of serif at a single size. */}
+          <h1 className="hero-animate font-serif text-4xl leading-[1.15] tracking-tight text-ivory text-balance sm:text-6xl lg:text-7xl">
+            Excelência jurídica.
+            <span className="block italic text-platinum">Segurança para decidir.</span>
+          </h1>
 
-        <div className="hero-animate flex flex-col sm:flex-row sm:items-center gap-4 lg:col-start-1 lg:col-span-7 lg:row-start-4">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-magnetic inline-flex items-center justify-center gap-2.5 bg-platinum hover:bg-platinum-hover text-navy font-semibold text-xs uppercase tracking-[0.16em] px-7 py-4 rounded-sm"
-          >
-            <MessageCircle className="w-4 h-4 fill-navy stroke-none" />
-            <span>Falar com advogado</span>
-          </a>
+          <p className="hero-animate max-w-2xl font-sans text-base leading-relaxed text-ivory-muted text-pretty sm:text-lg">
+            Advocacia criminal estratégica e assessoria tributária e empresarial.
+            Rigor técnico, discrição e atendimento próximo para proteger seus
+            direitos e orientar suas decisões.
+          </p>
 
-          <a
-            href="#areas"
-            className="link-hover inline-flex items-center justify-center sm:justify-start gap-2 text-platinum hover:text-ivory text-xs uppercase tracking-[0.16em] font-semibold py-2"
-          >
-            <span>Ver áreas de atuação</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </a>
+          <div className="hero-animate flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-8">
+            <a
+              href={getWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-magnetic rounded-full bg-platinum px-7 py-4 font-sans text-sm font-semibold uppercase tracking-wider text-navy hover:bg-platinum-hover"
+            >
+              <span className="flex items-center justify-center gap-3">
+                <MessageCircle className="h-5 w-5" aria-hidden="true" />
+                Agendar consulta
+              </span>
+            </a>
+            <a
+              href="#areas"
+              className="link-hover py-3 font-sans text-sm font-medium text-platinum hover:text-ivory"
+            >
+              <span className="flex items-center justify-center gap-2">
+                Conheça nossa atuação
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </a>
+          </div>
         </div>
 
-        {/* Service facts, not achievement stats — a hard rule for OAB copy.
-            Three columns on mobile too: stacked, they pushed the portrait and
-            the whole photo column off the first screen. */}
-        <dl className="hero-animate grid grid-cols-3 gap-px bg-platinum/15 border-y border-platinum/15 lg:col-start-1 lg:col-span-7 lg:row-start-5">
+        {/* Service facts, not achievement stats — a hard rule for OAB copy. */}
+        <dl className="hero-animate mx-auto mt-12 flex max-w-2xl divide-x divide-platinum/15 border-t border-platinum/15 pt-6">
           {FACTS.map((fact) => (
-            <div key={fact.label} className="bg-navy px-3 py-3.5 sm:px-4 sm:py-4">
-              <dt className="text-[8px] sm:text-[9px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.3em] text-platinum mb-1.5">
-                {fact.label}
-              </dt>
-              <dd className="text-[11px] sm:text-sm text-ivory leading-snug">{fact.value}</dd>
+            <div key={fact.label} className="min-w-0 flex-1 px-2 sm:px-4">
+              <dt className="font-sans text-sm text-ivory-muted">{fact.label}</dt>
+              <dd className="mt-2 font-sans text-sm leading-relaxed text-platinum">{fact.value}</dd>
             </div>
           ))}
         </dl>
@@ -347,7 +258,7 @@ export default function Hero() {
 
       {introDone && (
         <div className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-2">
-          <span className="text-[9px] font-mono uppercase tracking-[0.35em] text-ivory-dim">Role</span>
+          <span className="text-sm font-sans text-ivory-muted">Conheça o escritório</span>
           <span className="w-px h-8 bg-gradient-to-b from-platinum/50 to-transparent" />
         </div>
       )}

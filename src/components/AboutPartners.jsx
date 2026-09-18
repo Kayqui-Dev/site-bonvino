@@ -5,28 +5,29 @@ import { MapPin, Building } from 'lucide-react';
  * The two founding partners, presented with equal visual weight to match the
  * "Bonvino & Pereira" mark.
  *
- * TODO: Dr. Denilson's bio, practice focus and OAB number are still pending.
- * The copy below is deliberately neutral — no invented credentials, years of
- * experience or registration numbers. Replace `bio` when the real data arrives.
+ * Practice focuses follow the firm's brief; no unverified credentials,
+ * registration numbers or case results are added.
  */
 const partners = [
   {
-    name: 'Dr. Leandro Sousa Bonvino',
+    name: 'Leandro Bonvino',
     role: 'Sócio fundador',
+    focus: 'Advocacia Criminal Estratégica',
     photo: '/brand/socio-leandro-bonvino.jpg',
     // Seated studio portrait, 2:3. The container is 4:5, so cover trims height
     // only — biasing upward keeps the face and drops the empty lower frame.
     imgStyle: { objectPosition: 'center 18%' },
-    bio: 'Com mais de 10 anos de experiência na advocacia contenciosa e consultiva, construiu uma trajetória pautada na ética inegociável, rigor acadêmico e resultados expressivos em demandas cíveis, trabalhistas e empresariais.',
+    bio: 'À frente da atuação penal do escritório, Leandro Bonvino conduz a defesa de pessoas e empresas em investigações e processos criminais. Sua abordagem combina análise criteriosa das provas, construção de teses defensivas e atuação em habeas corpus e medidas de urgência, com atendimento humanizado e acompanhamento próximo em cada etapa.',
   },
   {
-    name: 'Dr. Denilson Pereira',
+    name: 'Denilson Pereira',
     role: 'Sócio fundador',
+    focus: 'Direito Tributário e Assessoria Empresarial',
     photo: '/brand/socio-denilson-pereira.jpg',
     // Same framing as Leandro's, so no corrective zoom is needed any more —
     // the old lobby shot that required it has been replaced.
     imgStyle: { objectPosition: 'center 18%' },
-    bio: 'Sócio fundador do escritório, dedica-se à condução estratégica de processos e ao acompanhamento direto de cada cliente, sustentando o mesmo compromisso com técnica e discrição que define a banca.',
+    bio: 'Com foco em Direito Tributário, Denilson Pereira assessora empresas no planejamento fiscal, na análise de créditos e na recuperação tributária, conforme a legislação aplicável. Atua na prevenção de riscos e no contencioso administrativo e judicial, conectando a estratégia jurídica às decisões e à realidade de cada negócio.',
   },
 ];
 
@@ -36,7 +37,7 @@ export default function AboutPartners() {
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="inline-block text-xs uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
+          <span className="inline-block text-sm uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
             Liderança &amp; Experiência
           </span>
           <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
@@ -59,6 +60,8 @@ export default function AboutPartners() {
                 <img
                   src={partner.photo}
                   alt={`${partner.name}, ${partner.role.toLowerCase()} do escritório`}
+                  loading="lazy"
+                  decoding="async"
                   style={partner.imgStyle}
                   className="w-full h-full object-cover"
                 />
@@ -73,16 +76,21 @@ export default function AboutPartners() {
                   <h3 className="text-xl font-serif font-bold text-ivory text-balance">
                     {partner.name}
                   </h3>
-                  <span className="text-[11px] text-platinum font-mono block tracking-wider uppercase">
+                  <span className="text-sm text-platinum font-mono block tracking-wider uppercase">
                     {partner.role} • OAB/SP
                   </span>
                 </div>
               </div>
 
-              <div className="p-8 flex-grow">
-                <p className="text-ivory-muted text-base leading-relaxed text-pretty">
-                  {partner.bio}
-                </p>
+              <div className="p-6 sm:p-8 flex-grow">
+                <div className="flex flex-col gap-4">
+                  <h4 className="font-sans text-sm font-semibold uppercase tracking-wider text-platinum text-balance">
+                    {partner.focus}
+                  </h4>
+                  <p className="text-ivory-muted text-base leading-relaxed text-pretty">
+                    {partner.bio}
+                  </p>
+                </div>
               </div>
             </article>
           ))}
@@ -99,12 +107,12 @@ export default function AboutPartners() {
                 <h4 className="text-ivory font-serif font-bold text-base text-balance">
                   Atendimento na Av. Paulista, coração financeiro de SP
                 </h4>
-                <p className="text-xs text-ivory-muted leading-relaxed">
+                <p className="text-sm text-ivory-muted leading-relaxed">
                   Endereço nobre e de fácil acesso para reuniões presenciais discretas:{' '}
                   <strong>Av. Paulista 1636, Sala 103, Bela Vista</strong>.
                 </p>
                 <div className="pt-3">
-                  <div className="inline-flex items-center gap-1.5 bg-navy/80 border border-platinum/30 px-3.5 py-1.5 rounded-full text-[11px] font-mono text-platinum">
+                  <div className="inline-flex items-center gap-1.5 bg-navy/80 border border-platinum/30 px-3.5 py-1.5 rounded-full text-sm font-mono text-platinum">
                     <MapPin className="w-3.5 h-3.5" />
                     <span>Sede Av. Paulista, 1636</span>
                   </div>
@@ -115,16 +123,16 @@ export default function AboutPartners() {
 
           <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div className="bg-navy/60 p-3 rounded-xl border border-platinum/10 text-center">
-              <span className="text-xl font-serif font-bold text-platinum block">10+ Anos</span>
-              <span className="text-[10px] uppercase font-mono text-ivory-muted">De Experiência</span>
+              <span className="text-lg font-serif font-bold text-platinum block">Proximidade</span>
+              <span className="text-sm font-sans text-ivory-muted">Contato com os sócios</span>
             </div>
             <div className="bg-navy/60 p-3 rounded-xl border border-platinum/10 text-center">
-              <span className="text-xl font-serif font-bold text-platinum block">1000+</span>
-              <span className="text-[10px] uppercase font-mono text-ivory-muted">Casos Atendidos</span>
+              <span className="text-lg font-serif font-bold text-platinum block">Estratégia</span>
+              <span className="text-sm font-sans text-ivory-muted">Análise individual</span>
             </div>
             <div className="bg-navy/60 p-3 rounded-xl border border-platinum/10 text-center col-span-2 sm:col-span-1">
-              <span className="text-xl font-serif font-bold text-platinum block">Sigilo</span>
-              <span className="text-[10px] uppercase font-mono text-ivory-muted">Absoluto OAB</span>
+              <span className="text-lg font-serif font-bold text-platinum block">Sigilo</span>
+              <span className="text-sm font-sans text-ivory-muted">Ética profissional</span>
             </div>
           </div>
         </div>
