@@ -9,30 +9,30 @@ export default {
       colors: {
         // Deep navy family — drawn from the Bonvino & Pereira monogram plate
         navy: {
-          DEFAULT: '#060A16',
-          card: '#0B1225',
-          elevated: '#121B33',
-          deep: '#1E3A6E',
-          border: 'rgba(195, 208, 226, 0.18)',
+          DEFAULT: 'rgb(var(--color-background) / <alpha-value>)',
+          card: 'rgb(var(--color-surface) / <alpha-value>)',
+          elevated: 'rgb(var(--color-surface) / <alpha-value>)',
+          deep: 'rgb(var(--color-surface) / <alpha-value>)',
+          border: 'rgb(var(--color-primary) / 0.18)',
         },
         // Polished chrome / platinum — the "BP" metal
         platinum: {
-          DEFAULT: '#C3D0E2',
-          hover: '#DCE6F2',
-          light: '#EAF1F8',
-          dim: '#8B9BB4',
-          glow: 'rgba(195, 208, 226, 0.15)',
+          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
+          hover: 'rgb(var(--color-foreground) / <alpha-value>)',
+          light: 'rgb(var(--color-foreground) / <alpha-value>)',
+          dim: 'rgb(var(--color-muted) / <alpha-value>)',
+          glow: 'rgb(var(--color-primary) / 0.15)',
         },
         ivory: {
-          DEFAULT: '#F5F8FC',
-          muted: '#94A3B8',
-          dim: '#64748B',
+          DEFAULT: 'rgb(var(--color-foreground) / <alpha-value>)',
+          muted: 'rgb(var(--color-muted) / <alpha-value>)',
+          dim: 'rgb(var(--color-muted) / <alpha-value>)',
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        mono: ['Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         '2rem': '2rem',

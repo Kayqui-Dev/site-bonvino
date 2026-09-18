@@ -6,11 +6,13 @@ import {
   Users,
   Building2,
   ShoppingCart,
+  ReceiptText,
   MessageCircle,
   Plus,
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getWhatsAppUrl } from '../site';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -32,6 +34,19 @@ const AREAS = [
       'Habeas corpus e medidas de urgência',
       'Acompanhamento em flagrante e delegacia',
       'Inquéritos policiais e ações penais',
+    ],
+  },
+  {
+    id: 'tributario',
+    icon: ReceiptText,
+    title: 'Direito Tributário',
+    matter: 'Tributário',
+    description:
+      'Assessoria preventiva e contenciosa para decisões fiscais, com foco na segurança jurídica da empresa.',
+    fronts: [
+      'Planejamento fiscal e prevenção de riscos',
+      'Análise de créditos e recuperação tributária',
+      'Defesa administrativa e judicial tributária',
     ],
   },
   {
@@ -121,6 +136,7 @@ export default function PracticeAreas() {
   };
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         sectionRef.current.querySelectorAll('.dossier-item'),
@@ -138,11 +154,6 @@ export default function PracticeAreas() {
 
     return () => ctx.revert();
   }, []);
-
-  const getWhatsAppUrl = (title) =>
-    `https://wa.me/551191737691?text=${encodeURIComponent(
-      `Olá! Gostaria de consultar o escritório Bonvino & Pereira sobre a área de *${title}* na Av. Paulista.`
-    )}`;
 
   // Arrow keys walk the cabinet, as with any composite widget.
   const onKeyDown = (e, index) => {
@@ -269,7 +280,7 @@ export default function PracticeAreas() {
                     `inert` keeps the collapsed CTA out of the tab order. */}
                 <div
                   id={`dossier-panel-${area.id}`}
-                  inert={isOpen ? undefined : ''}
+                  inert={!isOpen}
                   className={`grid transition-[grid-template-rows] duration-500 ease-out lg:block lg:transition-none ${
                     isOpen ? 'grid-rows-[1fr] lg:flex-1' : 'grid-rows-[0fr] lg:hidden'
                   }`}
@@ -313,7 +324,7 @@ export default function PracticeAreas() {
                   </div>
 
                   <a
-                    href={getWhatsAppUrl(area.title)}
+                    href={getWhatsAppUrl(`Olá! Gostaria de agendar uma consulta jurídica sobre ${area.title}.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-magnetic mt-auto inline-flex items-center justify-center gap-2.5 bg-platinum hover:bg-platinum-hover text-navy text-xs font-semibold uppercase tracking-[0.16em] py-3.5 px-5 rounded-sm self-start"

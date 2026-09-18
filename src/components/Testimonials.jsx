@@ -1,57 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const testimonials = [
   {
-    id: 1,
+    id: 'penal',
+    caseType: 'Defesa Penal Estratégica',
     quote:
-      'O Dr. Leandro conduziu nosso litígio contratual com precisão impecável. A clareza nas explicações e a agilidade na resposta no escritório da Av. Paulista foram determinantes para o nosso acordo favorável.',
-    clientName: 'Empresário do Setor Imobiliário',
-    caseType: 'Direito Civil & Contratos',
-    result: 'Acordo Favorable • R$ 450 mil preservados',
-    rating: 5,
+      'Em um momento difícil para nossa família, o Dr. Leandro Bonvino nos ouviu com atenção e explicou cada etapa da defesa. A agilidade na condução das medidas processuais e o cuidado com o pedido de habeas corpus fizeram a diferença na forma como atravessamos esse período.',
+    focus: 'Atendimento humanizado e defesa dos direitos fundamentais',
   },
   {
-    id: 2,
+    id: 'tributario',
+    caseType: 'Consultoria Tributária e Corporativa',
     quote:
-      'Em um momento delicado de disputa familiar e partilha de bens, o atendimento foi de um respeito e humanidade ímpares. Conseguimos resolver tudo sem desgastes judiciais prolongados.',
-    clientName: 'Cliente de Família & Sucessões',
-    caseType: 'Direito de Família',
-    result: 'Partilha Pacífica • Homologação Célere',
-    rating: 5,
+      'O Dr. Denilson Pereira analisou nossa operação e esclareceu as possibilidades de recuperação tributária dentro da legislação. O planejamento fiscal e a revisão dos riscos trouxeram mais clareza para as decisões da empresa, com orientação próxima em cada etapa.',
+    focus: 'Planejamento fiscal, recuperação tributária e prevenção de riscos',
   },
   {
-    id: 3,
+    id: 'empresarial',
+    caseType: 'Atuação Empresarial Geral',
     quote:
-      'Excelente assessoria trabalhista patronal. O escritório reestruturou todos os nossos modelos de contrato e evitou um contencioso milionário na empresa.',
-    clientName: 'Diretor de Operações de Logística',
-    caseType: 'Direito Trabalhista Patronal',
-    result: 'Auditoria de Riscos • 100% Sucesso',
-    rating: 5,
-  },
-  {
-    id: 4,
-    quote:
-      'A atuação na emergência jurídica criminal foi imediata. A presença no acompanhamento do inquérito garantiu nossa tranquilidade e a rápida restituição dos nossos direitos.',
-    clientName: 'Executivo do Setor Financeiro',
-    caseType: 'Direito Criminal & Defesa',
-    result: 'Arquivamento de Inquérito',
-    rating: 5,
+      'Encontramos na Bonvino & Pereira um suporte jurídico integrado para a rotina da empresa. Da revisão de contratos às questões societárias e tributárias, a equipe nos ajuda a antecipar riscos e fortalecer a proteção jurídica do negócio, sem perder de vista nossa realidade.',
+    focus: 'Assessoria integrada e proteção jurídica empresarial',
   },
 ];
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(null);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [isPaused]);
 
   const nextSlide = () => setCurrent((prev) => (prev + 1) % testimonials.length);
   const prevSlide = () => setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -69,86 +45,92 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-12 relative z-10">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <section id="depoimentos" aria-labelledby="testimonials-title" className="py-24 px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <span className="text-xs uppercase tracking-[0.25em] text-platinum font-mono font-semibold bg-platinum/10 py-1.5 px-4 rounded-full border border-platinum/30">
-            Reconhecimento
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-serif font-bold text-ivory">
-            Depoimentos de Clientes
-          </h2>
+        <div className="max-w-3xl mx-auto mb-12 text-center">
+          <div className="flex flex-col items-center gap-4">
+            <span className="text-sm uppercase tracking-widest text-platinum font-sans">
+              Atendimento próximo, atuação estratégica
+            </span>
+            <h2 id="testimonials-title" className="text-3xl sm:text-5xl font-serif font-bold text-ivory text-balance">
+              Depoimentos de clientes
+            </h2>
+            <p className="text-sm leading-relaxed text-ivory-muted text-pretty">
+              Os três textos abaixo são modelos ilustrativos, não relatos reais de clientes.
+              A publicação como depoimentos depende de validação e autorização dos envolvidos.
+            </p>
+          </div>
         </div>
 
         {/* Carousel Outer */}
         <div
-          className="relative max-w-4xl mx-auto"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          role="region"
+          aria-roledescription="carrossel"
+          aria-label="Modelos de depoimentos"
+          className="max-w-4xl mx-auto"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
+          onTouchCancel={() => { touchStartX.current = null; }}
         >
           {/* Card */}
-          <div className="glass-navy p-8 md:p-14 rounded-3rem border border-platinum/30 relative overflow-hidden transition-all duration-500 min-h-[320px] flex flex-col justify-between shadow-2xl">
-            {/* Giant Champagne Quote Mark */}
-            <Quote className="w-20 h-20 text-platinum/10 absolute -top-2 -left-2 pointer-events-none" />
-
-            <div className="relative z-10 space-y-6">
-              {/* Star Rating */}
-              <div className="flex items-center gap-1">
-                {[...Array(testimonials[current].rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-platinum text-platinum" />
-                ))}
+          <div className="glass-navy p-6 sm:p-10 md:p-12 rounded-3xl border border-platinum/30 shadow-2xl">
+            <div aria-live="polite" aria-atomic="true" className="flex min-h-[27rem] flex-col justify-between gap-8 sm:min-h-[23rem]">
+              <div className="flex flex-col gap-5">
+                <span className="self-start rounded-full border border-platinum/25 bg-platinum/10 px-3 py-1 font-sans text-sm text-platinum">
+                  Exemplo ilustrativo — não verificado
+                </span>
+                <h3 className="font-sans text-base font-semibold text-platinum text-balance">
+                  {testimonials[current].caseType}
+                </h3>
+                {/* Quote Text */}
+                <blockquote className="font-serif text-xl italic leading-relaxed text-ivory text-pretty sm:text-2xl">
+                  “{testimonials[current].quote}”
+                </blockquote>
               </div>
-
-              {/* Quote Text */}
-              <p className="text-ivory text-lg sm:text-2xl font-serif italic leading-relaxed">
-                "{testimonials[current].quote}"
+              <p className="border-t border-platinum/15 pt-5 font-sans text-sm leading-relaxed text-ivory-muted">
+                {testimonials[current].focus}
               </p>
-            </div>
-
-            {/* Client Meta */}
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h4 className="text-ivory font-bold text-base">{testimonials[current].clientName}</h4>
-                <p className="text-xs text-platinum font-mono uppercase tracking-wider mt-0.5">
-                  {testimonials[current].caseType} • <span className="text-emerald-400 font-semibold">{testimonials[current].result}</span>
-                </p>
-              </div>
-
-              {/* Dots */}
-              <div className="flex items-center gap-2">
-                {testimonials.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrent(idx)}
-                    aria-label={`Slide ${idx + 1}`}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      current === idx ? 'w-8 bg-platinum' : 'w-2 bg-white/20 hover:bg-white/40'
-                    }`}
-                  />
-                ))}
-              </div>
             </div>
           </div>
 
           {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            aria-label="Anterior"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 rounded-full bg-navy border border-platinum/40 text-ivory hover:text-platinum hover:border-platinum flex items-center justify-center transition-all shadow-xl"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            aria-label="Próximo"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 rounded-full bg-navy border border-platinum/40 text-ivory hover:text-platinum hover:border-platinum flex items-center justify-center transition-all shadow-xl"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          <div className="mt-5 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={prevSlide}
+              aria-label="Depoimento anterior"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-platinum/30 bg-navy text-platinum transition-colors hover:bg-navy-elevated"
+            >
+              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+            </button>
+            {/* Dots */}
+            <div className="flex items-center">
+              {testimonials.map((testimonial, idx) => (
+                <button
+                  key={testimonial.id}
+                  type="button"
+                  onClick={() => setCurrent(idx)}
+                  aria-label={`Ver exemplo ${idx + 1}: ${testimonial.caseType}`}
+                  aria-current={current === idx ? 'true' : undefined}
+                  className="flex h-11 w-11 items-center justify-center rounded-full"
+                >
+                  <span className={`h-2 rounded-full transition-all ${current === idx ? 'w-6 bg-platinum' : 'w-2 bg-platinum/30'}`} />
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={nextSlide}
+              aria-label="Próximo depoimento"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-platinum/30 bg-navy text-platinum transition-colors hover:bg-navy-elevated"
+            >
+              <ChevronRight className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+          <p className="mt-6 text-center font-sans text-sm leading-relaxed text-ivory-muted">
+            Cada caso exige análise individual. Não há garantia de resultado.
+          </p>
         </div>
       </div>
     </section>

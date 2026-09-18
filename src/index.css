@@ -3,40 +3,58 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-background: 6 10 22;
+    --color-surface: 18 27 42;
+    --color-primary: 195 208 226;
+    --color-foreground: 245 248 252;
+    --color-muted: 148 163 184;
+    color-scheme: dark;
+  }
+
   body {
-    background-color: #060A16;
-    color: #F5F8FC;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
     font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-primary));
+    outline-offset: 4px;
+  }
+
+  section[id], details[id] {
+    scroll-margin-top: 8rem;
   }
 }
 
 /* ---------- Surfaces ---------- */
 .glass-navy {
-  background: linear-gradient(160deg, rgba(18, 27, 51, 0.72) 0%, rgba(11, 18, 37, 0.82) 100%);
+  background: linear-gradient(160deg, rgb(var(--color-surface) / 0.72) 0%, rgb(var(--color-background) / 0.82) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(195, 208, 226, 0.14);
+  border: 1px solid rgb(var(--color-primary) / 0.14);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .glass-navy:hover {
-    border-color: rgba(195, 208, 226, 0.4);
-    box-shadow: 0 18px 50px -18px rgba(30, 58, 110, 0.75);
+    border-color: rgb(var(--color-primary) / 0.4);
+    box-shadow: 0 18px 50px -18px rgb(var(--color-background) / 0.75);
     transform: translateY(-3px);
   }
 }
 
 .glass-nav {
-  background: rgba(6, 10, 22, 0.78);
+  background: rgb(var(--color-background) / 0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(195, 208, 226, 0.18);
+  border: 1px solid rgb(var(--color-primary) / 0.18);
 }
 
 /* ---------- Chrome / platinum type ---------- */
 .text-platinum-gradient {
-  background: linear-gradient(135deg, #FFFFFF 10%, #EAF1F8 30%, #8B9BB4 55%, #EAF1F8 75%, #C3D0E2 100%);
+  background: linear-gradient(135deg, rgb(var(--color-foreground)) 10%, rgb(var(--color-primary)) 30%, rgb(var(--color-muted)) 55%, rgb(var(--color-foreground)) 75%, rgb(var(--color-primary)) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -46,14 +64,14 @@
 .chrome-plate {
   background: linear-gradient(
     100deg,
-    #7E8DA6 0%,
-    #C3D0E2 18%,
-    #FFFFFF 32%,
-    #DCE6F2 44%,
-    #7E8DA6 58%,
-    #C3D0E2 76%,
-    #FFFFFF 90%,
-    #9AA9C0 100%
+    rgb(var(--color-muted)) 0%,
+    rgb(var(--color-primary)) 18%,
+    rgb(var(--color-foreground)) 32%,
+    rgb(var(--color-primary)) 44%,
+    rgb(var(--color-muted)) 58%,
+    rgb(var(--color-primary)) 76%,
+    rgb(var(--color-foreground)) 90%,
+    rgb(var(--color-muted)) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -72,22 +90,22 @@
 .chrome-surface {
   background: linear-gradient(
     166deg,
-    #6E7D96 0%,
-    #AEBDD2 14%,
-    #F2F7FC 30%,
-    #C3D0E2 46%,
-    #7E8DA6 62%,
-    #DCE6F2 80%,
-    #8B9BB4 100%
+    rgb(var(--color-muted)) 0%,
+    rgb(var(--color-primary)) 14%,
+    rgb(var(--color-foreground)) 30%,
+    rgb(var(--color-primary)) 46%,
+    rgb(var(--color-muted)) 62%,
+    rgb(var(--color-primary)) 80%,
+    rgb(var(--color-muted)) 100%
   );
 }
 
 /* Radial vignette helper (bg-radial is not a Tailwind v3 utility) */
 .bg-radial {
-  background-image: radial-gradient(ellipse at center, var(--tw-gradient-from, transparent) 0%, var(--tw-gradient-to, #060A16) 100%);
+  background-image: radial-gradient(ellipse at center, var(--tw-gradient-from, transparent) 0%, var(--tw-gradient-to, rgb(var(--color-background))) 100%);
 }
 .vignette-navy {
-  background: radial-gradient(ellipse at 50% 40%, rgba(30, 58, 110, 0.35) 0%, rgba(6, 10, 22, 0.75) 55%, #060A16 100%);
+  background: radial-gradient(ellipse at 50% 40%, rgb(var(--color-surface) / 0.35) 0%, rgb(var(--color-background) / 0.75) 55%, rgb(var(--color-background)) 100%);
 }
 
 /* ---------- Gavel strike (hero) ---------- */
@@ -124,14 +142,14 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #060A16;
+  background: rgb(var(--color-background));
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E3A6E;
+  background: rgb(var(--color-surface));
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C3D0E2;
+  background: rgb(var(--color-primary));
 }
 
 /* ---------- Micro-interactions ---------- */
@@ -168,10 +186,14 @@
 /* Hairline divider that fades at both ends */
 .rule-fade {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(195, 208, 226, 0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.35), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
   .chrome-plate, .ken-burns, .gavel-shock, .shockwave {
     animation: none !important;
   }
