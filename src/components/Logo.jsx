@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * Brand lockup. Uses the real "BP" chrome monogram plate.
  * The circular crop excludes the wordmark baked into the source JPEG.
@@ -12,10 +10,13 @@ export default function Logo({ size = 'normal', className = '' }) {
       } ${className}`}
     >
       <img
-        src="/brand/logo-bp.jpg"
+        src="/brand/logo-bp-160.webp"
+        srcSet="/brand/logo-bp-160.webp 160w, /brand/logo-bp-320.webp 320w"
+        sizes={size === 'hero' ? '(min-width: 640px) 247px, 202px' : '79px'}
         alt="Monograma BP de Bonvino & Pereira Sociedade de Advogados"
-        width={640}
-        height={640}
+        width={320}
+        height={320}
+        decoding="async"
         className="absolute left-1/2 top-0 h-auto w-[140%] max-w-none -translate-x-1/2"
       />
     </span>

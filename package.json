@@ -5,20 +5,44 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3001 --host",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir .prerender && node scripts/prerender.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --project jsconfig.json",
+    "lint": "eslint . --max-warnings=0",
+    "test": "node --test tests/unit/*.test.js",
+    "test:e2e": "playwright test",
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "gsap": "^3.15.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "lighthouse": "^13.5.0",
     "postcss": "^8.4.49",
-    "tailwindcss": "3.4.17",
-    "vite": "^6.1.0"
+    "sharp": "^0.35.5",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.4"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
   }
 }

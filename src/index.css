@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('../node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-italic.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,13 +33,16 @@
     --color-primary: 195 208 226;
     --color-foreground: 245 248 252;
     --color-muted: 148 163 184;
+    --header-offset: calc(7.5rem + env(safe-area-inset-top, 0px));
     color-scheme: dark;
   }
 
   body {
+    min-width: 0;
     background-color: rgb(var(--color-background));
     color: rgb(var(--color-foreground));
     font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
   }
 
   :focus-visible {
@@ -23,178 +50,140 @@
     outline-offset: 4px;
   }
 
-  section[id], details[id] {
-    scroll-margin-top: 8rem;
+  :where(section[id], article[id], details[id], main[id], input, select, textarea, [tabindex='-1']) {
+    scroll-margin-top: var(--header-offset);
+  }
+
+  :where(p, h1, h2, h3, h4, a, li, dd) {
+    overflow-wrap: break-word;
+  }
+}
+
+@layer components {
+  .section-shell {
+    @apply px-4 py-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24;
+  }
+
+  .section-label {
+    @apply inline-block max-w-full rounded-full border border-platinum/30 bg-platinum/10 px-4 py-2 text-center font-sans text-sm font-semibold uppercase text-platinum;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, calc(1rem + 5vw), 4.5rem);
+  }
+
+  .section-title {
+    font-size: clamp(1.875rem, calc(1.125rem + 2.5vw), 3rem);
   }
 }
 
 /* ---------- Surfaces ---------- */
 .glass-navy {
-  background: linear-gradient(160deg, rgb(var(--color-surface) / 0.72) 0%, rgb(var(--color-background) / 0.82) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgb(var(--color-primary) / 0.14);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .glass-navy:hover {
-    border-color: rgb(var(--color-primary) / 0.4);
-    box-shadow: 0 18px 50px -18px rgb(var(--color-background) / 0.75);
-    transform: translateY(-3px);
-  }
+  background: linear-gradient(160deg, rgb(var(--color-surface) / 0.72), rgb(var(--color-background) / 0.82));
+  border: 1px solid rgb(var(--color-primary) / 0.25);
+  transition: border-color 180ms ease, transform 180ms ease;
 }
 
 .glass-nav {
-  background: rgb(var(--color-background) / 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgb(var(--color-primary) / 0.18);
+  background: rgb(var(--color-background) / 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(var(--color-primary) / 0.2);
 }
 
-/* ---------- Chrome / platinum type ---------- */
-.text-platinum-gradient {
-  background: linear-gradient(135deg, rgb(var(--color-foreground)) 10%, rgb(var(--color-primary)) 30%, rgb(var(--color-muted)) 55%, rgb(var(--color-foreground)) 75%, rgb(var(--color-primary)) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Brushed-metal monogram with a light sweep */
-.chrome-plate {
-  background: linear-gradient(
-    100deg,
-    rgb(var(--color-muted)) 0%,
-    rgb(var(--color-primary)) 18%,
-    rgb(var(--color-foreground)) 32%,
-    rgb(var(--color-primary)) 44%,
-    rgb(var(--color-muted)) 58%,
-    rgb(var(--color-primary)) 76%,
-    rgb(var(--color-foreground)) 90%,
-    rgb(var(--color-muted)) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: sheen 7s infinite linear;
-}
-
-@keyframes sheen {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
-/* Brushed metal as a *surface* (chrome-plate above only clips text) — used for
-   the gavel head and the strike bar in the intro. */
-.chrome-surface {
-  background: linear-gradient(
-    166deg,
-    rgb(var(--color-muted)) 0%,
-    rgb(var(--color-primary)) 14%,
-    rgb(var(--color-foreground)) 30%,
-    rgb(var(--color-primary)) 46%,
-    rgb(var(--color-muted)) 62%,
-    rgb(var(--color-primary)) 80%,
-    rgb(var(--color-muted)) 100%
-  );
-}
-
-/* Radial vignette helper (bg-radial is not a Tailwind v3 utility) */
-.bg-radial {
-  background-image: radial-gradient(ellipse at center, var(--tw-gradient-from, transparent) 0%, var(--tw-gradient-to, rgb(var(--color-background))) 100%);
-}
 .vignette-navy {
-  background: radial-gradient(ellipse at 50% 40%, rgb(var(--color-surface) / 0.35) 0%, rgb(var(--color-background) / 0.75) 55%, rgb(var(--color-background)) 100%);
+  background: radial-gradient(ellipse at 50% 40%, rgb(var(--color-surface) / 0.35), rgb(var(--color-background)) 75%);
 }
 
-/* ---------- Gavel strike (hero) ---------- */
-.gavel-shock {
-  animation: gavelShock 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-@keyframes gavelShock {
-  0%   { transform: translateY(0) scale(1); }
-  30%  { transform: translateY(3px) scale(0.994); }
-  60%  { transform: translateY(-1px) scale(1.002); }
-  100% { transform: translateY(0) scale(1); }
+.site-header {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  inset-inline: 0;
+  z-index: 50;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
 }
 
-/* Expanding shockwave ring left by the strike */
-.shockwave {
-  animation: shockwave 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes shockwave {
-  0%   { transform: scale(0.2); opacity: 0.75; border-width: 3px; }
-  100% { transform: scale(3.2); opacity: 0; border-width: 1px; }
+.mobile-navigation {
+  max-height: calc(100dvh - 7rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-/* Slow cinematic drift for background plates */
-.ken-burns {
-  animation: kenBurns 22s ease-in-out infinite alternate;
+.footer-shell {
+  padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
 }
-@keyframes kenBurns {
-  0%   { transform: scale(1.04) translate3d(0, 0, 0); }
-  100% { transform: scale(1.14) translate3d(-1.5%, -1.5%, 0); }
+
+.skip-link {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top, 0px));
+  left: max(1rem, env(safe-area-inset-left, 0px));
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: rgb(var(--color-primary));
+  color: rgb(var(--color-background));
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.whatsapp-float {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+}
+
+.whatsapp-float:not([hidden]) {
+  display: flex;
+}
+
+@media (min-width: 64rem) {
+  .dossier-item {
+    flex: 0 0 clamp(3.5rem, 5.5vw, 5rem);
+    transition: flex 200ms ease-out, border-color 180ms ease;
+  }
+
+  .dossier-item[data-open='true'] {
+    flex: 1 1 0%;
+  }
+}
+
+/* Short landscape viewports must keep navigation clear of floating actions. */
+@media (max-height: 32rem) {
+  .whatsapp-float:not([hidden]) {
+    display: none;
+  }
 }
 
 /* ---------- Scrollbar ---------- */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: rgb(var(--color-background));
-}
-::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-surface));
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--color-primary));
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgb(var(--color-background)); }
+::-webkit-scrollbar-thumb { background: rgb(var(--color-surface)); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--color-primary)); }
 
 /* ---------- Micro-interactions ---------- */
-.btn-magnetic {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+.btn-magnetic, .link-hover {
+  transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Hover-only lift, so a touch tap does not leave the button stuck enlarged
-   (mobile fires :hover and keeps it until the next tap elsewhere). */
 @media (hover: hover) and (pointer: fine) {
-  .btn-magnetic:hover {
-    transform: scale(1.03);
-  }
+  .btn-magnetic:hover { transform: translateY(-1px); }
+  .link-hover:hover { transform: translateY(-1px); }
+  .partner-card:hover { border-color: rgb(var(--color-primary) / 0.4); transform: translateY(-2px); }
 }
 
-/* Touch feedback: mobile had no press state at all before */
-.btn-magnetic:active {
-  transform: scale(0.965);
-}
-
-.link-hover {
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .link-hover:hover {
-    transform: translateY(-1px);
-  }
-}
-.link-hover:active {
-  transform: translateY(1px);
-}
-
-/* Hairline divider that fades at both ends */
-.rule-fade {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(var(--color-primary) / 0.35), transparent);
-}
+.btn-magnetic:active { transform: scale(0.98); }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto !important;
+  html.scroll-smooth { scroll-behavior: auto; }
+  .btn-magnetic, .link-hover, .glass-navy, .dossier-item, .dossier-trigger svg, .whatsapp-float {
+    transition: none;
   }
-
-  .chrome-plate, .ken-burns, .gavel-shock, .shockwave {
-    animation: none !important;
-  }
+  .btn-magnetic:hover, .btn-magnetic:active, .link-hover:hover, .partner-card:hover { transform: none; }
 }
