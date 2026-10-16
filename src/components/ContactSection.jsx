@@ -10,6 +10,7 @@ const practiceAreas = [
   'Direito de Família & Sucessões',
   'Direito Empresarial & Compliance',
   'Direito do Consumidor',
+  'Terceiro Setor',
   'Outra Área / Consulta Geral',
 ];
 

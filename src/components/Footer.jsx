@@ -55,6 +55,7 @@ export default function Footer() {
                 <li><a href="#areas" className="hover:text-platinum transition-colors">Direito de Família</a></li>
                 <li><a href="#areas" className="hover:text-platinum transition-colors">Direito Empresarial</a></li>
                 <li><a href="#areas" className="hover:text-platinum transition-colors">Direito do Consumidor</a></li>
+                <li><a href="#area-terceiro-setor" className="hover:text-platinum transition-colors">Terceiro Setor</a></li>
               </ul>
             </div>
           </div>
