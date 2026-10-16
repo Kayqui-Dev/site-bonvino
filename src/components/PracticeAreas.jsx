@@ -5,6 +5,7 @@ import {
   ShieldCheck,
   Users,
   Building2,
+  Landmark,
   ShoppingCart,
   ReceiptText,
   MessageCircle,
@@ -114,6 +115,19 @@ const AREAS = [
       'Ressarcimento e repetição de indébito',
     ],
   },
+  {
+    id: 'terceiro-setor',
+    icon: Landmark,
+    title: 'Terceiro Setor',
+    matter: 'Terceiro Setor',
+    description:
+      'Assessoria jurídica a associações, institutos e fundações na estruturação de projetos, na formalização de parcerias e no acompanhamento de sua execução.',
+    fronts: [
+      'Constituição, estatutos e governança de organizações.',
+      'Elaboração e análise de projetos, planos de trabalho e instrumentos de parceria.',
+      'Orientação jurídica na execução e prestação de contas de projetos.',
+    ],
+  },
 ];
 
 export default function PracticeAreas() {
@@ -125,6 +139,51 @@ export default function PracticeAreas() {
 
   useEffect(() => {
     hoverable.current = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }, []);
+
+  useEffect(() => {
+    let alignmentFrame;
+    let navigationRevision = 0;
+
+    const selectLinkedArea = (hash) => {
+      const index = AREAS.findIndex((area) => hash === `#area-${area.id}`);
+      if (index === -1) return false;
+      setActive(index);
+      const revision = ++navigationRevision;
+      window.cancelAnimationFrame(alignmentFrame);
+      alignmentFrame = window.requestAnimationFrame(() => {
+        const animations = sectionRef.current?.getAnimations({ subtree: true }) ?? [];
+        // Closing an earlier accordion moves the anchor until its transition ends.
+        Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
+          if (revision !== navigationRevision) return;
+          const target = document.getElementById(`area-${AREAS[index].id}`);
+          target?.scrollIntoView({ block: 'start' });
+          target?.querySelector('.dossier-trigger')?.focus({ preventScroll: true });
+        });
+      });
+      return true;
+    };
+    const syncHash = () => selectLinkedArea(window.location.hash);
+    const handleAreaLink = (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target instanceof Element
+        ? event.target.closest('a[href^="#area-"]')
+        : null;
+      const hash = link?.getAttribute('href');
+      if (!selectLinkedArea(hash)) return;
+      event.preventDefault();
+      if (window.location.hash !== hash) window.history.pushState(null, '', hash);
+    };
+
+    syncHash();
+    window.addEventListener('hashchange', syncHash);
+    document.addEventListener('click', handleAreaLink);
+    return () => {
+      navigationRevision += 1;
+      window.cancelAnimationFrame(alignmentFrame);
+      window.removeEventListener('hashchange', syncHash);
+      document.removeEventListener('click', handleAreaLink);
+    };
   }, []);
 
   // On mobile the folders behave like an accordion, so tapping the open one
@@ -190,7 +249,7 @@ export default function PracticeAreas() {
         </div>
 
         {/* ---------- The cabinet ---------- */}
-        <div className="flex flex-col lg:flex-row gap-2.5 lg:h-[29rem]">
+        <div className="flex flex-col lg:flex-row gap-2.5 lg:min-h-[29rem]">
           {AREAS.map((area, i) => {
             const Icon = area.icon;
             const isOpen = active === i;
@@ -198,7 +257,8 @@ export default function PracticeAreas() {
             return (
               <article
                 key={area.id}
-                className={`dossier-item relative flex flex-col overflow-hidden rounded-sm border transition-all duration-500 ease-out ${
+                id={`area-${area.id}`}
+                className={`dossier-item relative flex scroll-mt-32 flex-col overflow-hidden rounded-sm border transition-all duration-500 ease-out ${
                   isOpen
                     ? 'border-platinum/45 bg-navy-elevated lg:flex-[3.6]'
                     : 'border-platinum/15 bg-navy-elevated/40 hover:border-platinum/35 hover:bg-navy-elevated/70 lg:flex-[0.42]'

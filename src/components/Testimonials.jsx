@@ -25,12 +25,54 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+function ThirdSectorInfo() {
+  return (
+    <article aria-labelledby="third-sector-info-title" className="glass-navy rounded-3xl border border-platinum/30 p-6 shadow-2xl sm:p-10 md:p-12">
+      <div className="flex flex-col gap-6">
+        <span className="self-start rounded-full border border-platinum/25 bg-platinum/10 px-3 py-1 font-sans text-sm leading-relaxed text-platinum">
+          Informação institucional — não é depoimento
+        </span>
+        <h3 id="third-sector-info-title" className="font-serif text-2xl leading-tight text-ivory text-balance sm:text-3xl">
+          Assessoria Jurídica para Organizações do Terceiro Setor
+        </h3>
+        <p className="font-sans text-sm leading-relaxed text-ivory-muted text-pretty sm:text-base">
+          Atuação jurídica voltada ao suporte de associações, institutos e fundações na estruturação de projetos, formalização de parcerias, acompanhamento da execução de recursos e orientação em processos de prestação de contas.
+        </p>
+        <ul className="flex flex-col divide-y divide-platinum/10 border-y border-platinum/15 font-sans text-sm leading-relaxed text-ivory">
+          {[
+            'Projetos e parcerias institucionais.',
+            'Emendas parlamentares e execução de recursos.',
+            'Prestação de contas e conformidade jurídica.',
+          ].map((highlight) => (
+            <li key={highlight} className="py-3">
+              <div className="flex items-start gap-3">
+                <span aria-hidden="true" className="text-platinum/60">—</span>
+                <span>{highlight}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <a href="#area-terceiro-setor" className="self-start rounded-sm font-sans text-sm font-medium text-platinum underline underline-offset-4 transition-colors hover:text-ivory">
+          Conheça a atuação no Terceiro Setor
+        </a>
+      </div>
+    </article>
+  );
+}
+
+export default function Testimonials({ clientTestimonials = [] }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(null);
+  const authorizedTestimonials = clientTestimonials.filter(
+    (testimonial) => testimonial.authenticityConfirmed === true && testimonial.publicationAuthorized === true
+  );
+  const isIllustrative = authorizedTestimonials.length === 0;
+  const slides = isIllustrative ? testimonials : authorizedTestimonials;
+  const currentIndex = Math.min(current, slides.length - 1);
+  const currentSlide = slides[currentIndex];
 
-  const nextSlide = () => setCurrent((prev) => (prev + 1) % testimonials.length);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const nextSlide = () => setCurrent((currentIndex + 1) % slides.length);
+  const prevSlide = () => setCurrent((currentIndex - 1 + slides.length) % slides.length);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -57,8 +99,9 @@ export default function Testimonials() {
               Depoimentos de clientes
             </h2>
             <p className="text-sm leading-relaxed text-ivory-muted text-pretty">
-              Os três textos abaixo são modelos ilustrativos, não relatos reais de clientes.
-              A publicação como depoimentos depende de validação e autorização dos envolvidos.
+              {isIllustrative
+                ? 'Os três textos do carrossel são modelos ilustrativos, não relatos reais de clientes. A publicação como depoimentos depende de validação e autorização dos envolvidos.'
+                : 'Manifestações publicadas após confirmação de autenticidade e autorização dos envolvidos. Cada relato se refere à experiência individual de atendimento.'}
             </p>
           </div>
         </div>
@@ -67,7 +110,7 @@ export default function Testimonials() {
         <div
           role="region"
           aria-roledescription="carrossel"
-          aria-label="Modelos de depoimentos"
+          aria-label={isIllustrative ? 'Modelos de depoimentos' : 'Manifestações autorizadas de clientes'}
           className="max-w-4xl mx-auto"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -78,19 +121,31 @@ export default function Testimonials() {
             <div aria-live="polite" aria-atomic="true" className="flex min-h-[27rem] flex-col justify-between gap-8 sm:min-h-[23rem]">
               <div className="flex flex-col gap-5">
                 <span className="self-start rounded-full border border-platinum/25 bg-platinum/10 px-3 py-1 font-sans text-sm text-platinum">
-                  Exemplo ilustrativo — não verificado
+                  {isIllustrative ? 'Exemplo ilustrativo — não verificado' : 'Manifestação autorizada'}
                 </span>
                 <h3 className="font-sans text-base font-semibold text-platinum text-balance">
-                  {testimonials[current].caseType}
+                  {currentSlide.caseType}
                 </h3>
                 {/* Quote Text */}
                 <blockquote className="font-serif text-xl italic leading-relaxed text-ivory text-pretty sm:text-2xl">
-                  “{testimonials[current].quote}”
+                  “{currentSlide.quote}”
                 </blockquote>
               </div>
-              <p className="border-t border-platinum/15 pt-5 font-sans text-sm leading-relaxed text-ivory-muted">
-                {testimonials[current].focus}
-              </p>
+              <div className="border-t border-platinum/15 pt-5">
+                <div className="flex flex-col gap-4 font-sans text-sm leading-relaxed text-ivory-muted">
+                  <p>{currentSlide.focus}</p>
+                  {!isIllustrative && (currentSlide.representative || currentSlide.organization) && (
+                    <footer>
+                      {currentSlide.representative && (
+                        <p className="font-semibold text-platinum">{currentSlide.representative}</p>
+                      )}
+                      {(currentSlide.role || currentSlide.organization) && (
+                        <p>{[currentSlide.role, currentSlide.organization].filter(Boolean).join(' • ')}</p>
+                      )}
+                    </footer>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -106,16 +161,16 @@ export default function Testimonials() {
             </button>
             {/* Dots */}
             <div className="flex items-center">
-              {testimonials.map((testimonial, idx) => (
+              {slides.map((testimonial, idx) => (
                 <button
                   key={testimonial.id}
                   type="button"
                   onClick={() => setCurrent(idx)}
-                  aria-label={`Ver exemplo ${idx + 1}: ${testimonial.caseType}`}
-                  aria-current={current === idx ? 'true' : undefined}
+                  aria-label={`Ver ${isIllustrative ? 'exemplo' : 'manifestação'} ${idx + 1}: ${testimonial.caseType}`}
+                  aria-current={currentIndex === idx ? 'true' : undefined}
                   className="flex h-11 w-11 items-center justify-center rounded-full"
                 >
-                  <span className={`h-2 rounded-full transition-all ${current === idx ? 'w-6 bg-platinum' : 'w-2 bg-platinum/30'}`} />
+                  <span className={`h-2 rounded-full transition-all ${currentIndex === idx ? 'w-6 bg-platinum' : 'w-2 bg-platinum/30'}`} />
                 </button>
               ))}
             </div>
@@ -131,6 +186,10 @@ export default function Testimonials() {
           <p className="mt-6 text-center font-sans text-sm leading-relaxed text-ivory-muted">
             Cada caso exige análise individual. Não há garantia de resultado.
           </p>
+        </div>
+
+        <div className="mx-auto mt-12 max-w-4xl">
+          <ThirdSectorInfo />
         </div>
       </div>
     </section>
