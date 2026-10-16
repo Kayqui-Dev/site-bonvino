@@ -30,8 +30,8 @@ const photoSources = (photo, format) => [320, 480, 768, 1023].map((width) => `/b
 export default function AboutPartners() {
   return (
     <section id="sobre" aria-labelledby="partners-title" className="section-shell relative z-10">
-      <div className="mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+      <div className="partners-container mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
+        <div className="mx-auto flex w-full min-w-0 max-w-3xl flex-col items-center gap-4 text-center">
           <span className="section-label">Liderança &amp; Experiência</span>
           <h2 id="partners-title" className="section-title font-serif font-bold text-ivory text-balance">Os sócios</h2>
           <p className="text-base leading-relaxed text-ivory-muted text-pretty">Uma sociedade construída a quatro mãos, onde cada cliente é acompanhado diretamente por um dos titulares — sem intermediários.</p>
@@ -39,7 +39,7 @@ export default function AboutPartners() {
         <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 md:gap-8">
           {partners.map((partner) => (
             <article key={partner.name} className="partner-card glass-navy flex min-w-0 flex-col overflow-hidden rounded-3xl shadow-xl sm:rounded-3rem">
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="partner-photo relative aspect-[4/5] overflow-hidden">
                 <picture className="block h-full w-full">
                   <source type="image/avif" srcSet={photoSources(partner.photo, 'avif')} sizes={PHOTO_SIZES} />
                   <source type="image/webp" srcSet={photoSources(partner.photo, 'webp')} sizes={PHOTO_SIZES} />
@@ -47,12 +47,12 @@ export default function AboutPartners() {
                 </picture>
                 {/* Light navy grade preserves the real color of the partners' suits. */}
                 <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy via-navy/15 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-5 sm:p-6">
+                <div className="partner-overlay absolute inset-x-0 bottom-0 flex flex-col gap-1 p-5 sm:p-6">
                   <h3 className="font-serif text-xl font-bold text-ivory text-balance sm:text-2xl">{partner.name}</h3>
                   <span className="text-sm uppercase leading-relaxed tracking-wide text-platinum">{partner.role} • OAB/SP</span>
                 </div>
               </div>
-              <div className="flex flex-1 flex-col gap-4 p-5 sm:p-8">
+              <div className="partner-body flex flex-1 flex-col gap-4 p-5 sm:p-8">
                 <h4 className="font-sans text-sm font-semibold uppercase leading-relaxed tracking-wider text-platinum text-balance">{partner.focus}</h4>
                 <p className="text-base leading-relaxed text-ivory-muted text-pretty">{partner.bio}</p>
               </div>

@@ -23,7 +23,7 @@ export default function Footer() {
               <p>CNPJ: 65.949.614/0001-60</p>
             </div>
           </div>
-          <div className="grid min-w-0 grid-cols-2 gap-5 text-sm sm:gap-8">
+          <div className="footer-navigation grid min-w-0 gap-5 text-sm sm:gap-8">
             <nav aria-label="Navegação no rodapé" className="flex min-w-0 flex-col gap-3">
               <h3 className="font-serif text-sm font-bold uppercase text-platinum">Navegação</h3>
               <ul className="flex flex-col">

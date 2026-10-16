@@ -49,8 +49,8 @@ export default function ContactSection() {
 
   return (
     <section id="contato" aria-labelledby="contact-title" className="section-shell relative z-10">
-      <div className="mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+      <div className="contact-container mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
+        <div className="mx-auto flex w-full min-w-0 max-w-3xl flex-col items-center gap-4 text-center">
           <span className="section-label">Agendamento &amp; Consulta</span>
           <h2 id="contact-title" className="section-title font-serif font-bold text-ivory text-balance">Fale com um Advogado</h2>
           <p className="text-base leading-relaxed text-ivory-muted text-pretty">Atendimento presencial na Av. Paulista, 1636 ou reuniões por videochamada com sigilo absoluto.</p>
@@ -58,7 +58,7 @@ export default function ContactSection() {
         <div className="grid min-w-0 grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="min-w-0 lg:col-span-7">
             {isPrepared ? (
-              <div className="glass-navy flex min-w-0 flex-col items-center gap-6 rounded-3xl p-6 text-center sm:rounded-3rem sm:p-8">
+              <div className="contact-review glass-navy flex min-w-0 flex-col items-center gap-6 rounded-3xl p-6 text-center sm:rounded-3rem sm:p-8">
                 <MessageCircle className="h-8 w-8 text-platinum" aria-hidden="true" />
                 <div className="flex flex-col gap-3">
                   <h3 ref={reviewHeading} tabIndex={-1} className="font-serif text-2xl font-bold text-ivory text-balance">Mensagem pronta para envio</h3>
@@ -66,7 +66,7 @@ export default function ContactSection() {
                 </div>
                 <div className="w-full min-w-0 rounded-2xl bg-navy p-4 text-left text-ivory sm:p-5"><p className="whitespace-pre-line break-words text-sm leading-relaxed">{preparedMessage}</p></div>
                 <div className="flex w-full flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
-                  <a href={getWhatsAppUrl(preparedMessage)} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-platinum px-5 py-3 text-sm font-semibold text-navy hover:bg-platinum-hover">
+                  <a href={getWhatsAppUrl(preparedMessage)} target="_blank" rel="noopener noreferrer" className="contact-action flex min-h-12 items-center justify-center gap-2 rounded-full bg-platinum px-5 py-3 text-sm font-semibold text-navy hover:bg-platinum-hover">
                     <MessageCircle className="h-5 w-5 shrink-0" aria-hidden="true" /><span>Continuar no WhatsApp</span>
                   </a>
                   <button type="button" onClick={() => {
@@ -76,12 +76,12 @@ export default function ContactSection() {
                 </div>
               </div>
             ) : (
-              <form noValidate onSubmit={handleSubmit} aria-labelledby="contact-form-title" className="glass-navy flex min-w-0 flex-col gap-6 rounded-3xl p-5 sm:rounded-3rem sm:p-8 xl:p-10">
+              <form noValidate onSubmit={handleSubmit} aria-labelledby="contact-form-title" className="contact-form glass-navy flex min-w-0 flex-col gap-6 rounded-3xl p-5 sm:rounded-3rem sm:p-8 xl:p-10">
                 <div className="flex flex-col gap-2">
                   <h3 id="contact-form-title" className="font-serif text-2xl font-bold text-ivory text-balance">Solicitar consulta jurídica</h3>
                   <p className="text-sm leading-relaxed text-ivory-muted">Preencha os campos obrigatórios para preparar sua mensagem. O envio é concluído por você no WhatsApp.</p>
                 </div>
-                <div className="grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="contact-fields grid min-w-0 gap-5">
                   {FIELDS.map(({ label, ...field }) => (
                     <div key={field.name} className="flex min-w-0 flex-col gap-2">
                       <label htmlFor={`contact-${field.name}`} className="text-sm leading-relaxed text-ivory-muted">{label} *</label>
@@ -103,13 +103,13 @@ export default function ContactSection() {
                   <textarea id="contact-message" name="message" rows={4} maxLength={1500} required value={formData.message} onChange={handleChange} aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'contact-message-error' : undefined} placeholder="Descreva brevemente o motivo da consulta, sem dados sensíveis." className={`${INPUT_CLASS} resize-y ${errors.message ? 'border-platinum' : 'border-platinum/30 focus:border-platinum'}`} />
                   <FieldError name="message" message={errors.message} />
                 </div>
-                <button type="submit" className="btn-magnetic flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-platinum px-5 py-4 text-sm font-semibold text-navy hover:bg-platinum-hover"><Send className="h-4 w-4 shrink-0" aria-hidden="true" /><span>Preparar mensagem</span></button>
+                <button type="submit" className="contact-action btn-magnetic flex min-h-12 w-full items-center justify-center gap-3 rounded-full bg-platinum px-5 py-4 text-sm font-semibold text-navy hover:bg-platinum-hover"><Send className="h-4 w-4 shrink-0" aria-hidden="true" /><span>Preparar mensagem</span></button>
                 <p className="text-sm leading-relaxed text-ivory-muted">Seus dados não são armazenados neste site. Ao continuar, serão incluídos na mensagem do WhatsApp. Evite informações sensíveis ou documentos neste primeiro contato.</p>
               </form>
             )}
           </div>
           <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
-            <div className="glass-navy flex min-w-0 flex-col gap-4 rounded-3xl p-5 sm:p-6">
+            <div className="contact-panel glass-navy flex min-w-0 flex-col gap-4 rounded-3xl p-5 sm:p-6">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-platinum/40 bg-platinum/10 text-platinum"><Phone className="h-5 w-5" aria-hidden="true" /></div>
                 <div className="min-w-0">
@@ -117,9 +117,9 @@ export default function ContactSection() {
                   <a href={`tel:+${FIRM.phoneNumber}`} className="inline-flex min-h-11 items-center rounded-lg text-sm text-platinum hover:underline">{FIRM.phone}</a>
                 </div>
               </div>
-              <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="btn-magnetic inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-platinum px-3 py-3 text-center text-sm font-semibold text-navy hover:bg-platinum-hover"><MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" /><span>Conversar pelo WhatsApp</span></a>
+              <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer" className="contact-action btn-magnetic inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-platinum px-3 py-3 text-center text-sm font-semibold text-navy hover:bg-platinum-hover"><MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" /><span>Conversar pelo WhatsApp</span></a>
             </div>
-            <div className="glass-navy flex min-w-0 flex-col gap-5 rounded-3xl p-5 text-sm sm:p-6">
+            <div className="contact-panel glass-navy flex min-w-0 flex-col gap-5 rounded-3xl p-5 text-sm sm:p-6">
               <div className="flex items-start gap-3">
                 <MapPin className="mt-1 h-5 w-5 shrink-0 text-platinum" aria-hidden="true" />
                 <div className="flex min-w-0 flex-col gap-2"><h3 className="text-sm font-medium uppercase tracking-wide text-ivory-muted">Endereço da Sede</h3><p className="leading-relaxed text-ivory">{FIRM.address}</p></div>

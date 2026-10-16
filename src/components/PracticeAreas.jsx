@@ -7,15 +7,17 @@ const ICONS = [ShieldCheck, ReceiptText, Scale, Briefcase, Users, Building2, Sho
 
 export default function PracticeAreas() {
   const sectionRef = useRef(/** @type {HTMLElement | null} */ (null));
+  const cabinetRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     sectionRef.current?.setAttribute('data-interactive', 'true');
     let alignmentFrame = 0;
-    const desktop = window.matchMedia('(min-width: 1024px)');
-    const keepDesktopOpen = (event) => {
-      if (event.matches) setActive((current) => current < 0 ? 0 : current);
+    const cabinet = cabinetRef.current;
+    const keepDesktopOpen = () => {
+      if (cabinet && getComputedStyle(cabinet).flexDirection === 'row') setActive((current) => current < 0 ? 0 : current);
     };
+    const layoutObserver = new ResizeObserver(keepDesktopOpen);
     const selectLinkedArea = (hash) => {
       const index = PRACTICE_AREAS.findIndex((area) => hash === `#area-${area.id}`);
       if (index === -1) return false;
@@ -39,19 +41,19 @@ export default function PracticeAreas() {
       if (window.location.hash !== hash) window.history.pushState(null, '', hash);
     };
     syncHash();
-    desktop.addEventListener('change', keepDesktopOpen);
+    if (cabinet) layoutObserver.observe(cabinet);
     window.addEventListener('hashchange', syncHash);
     document.addEventListener('click', handleAreaLink);
     return () => {
       window.cancelAnimationFrame(alignmentFrame);
-      desktop.removeEventListener('change', keepDesktopOpen);
+      layoutObserver.disconnect();
       window.removeEventListener('hashchange', syncHash);
       document.removeEventListener('click', handleAreaLink);
     };
   }, []);
 
   const handleSelect = (index) => {
-    const collapsible = window.matchMedia('(max-width: 1023px)').matches;
+    const collapsible = !cabinetRef.current || getComputedStyle(cabinetRef.current).flexDirection !== 'row';
     setActive((previous) => collapsible && previous === index ? -1 : index);
   };
 
@@ -70,7 +72,7 @@ export default function PracticeAreas() {
 
   return (
     <section id="areas" ref={sectionRef} aria-labelledby="areas-title" className="section-shell relative z-10">
-      <div className="mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
+      <div className="dossier-layout mx-auto flex max-w-7xl flex-col gap-10 sm:gap-12">
         <div className="flex max-w-2xl flex-col gap-5">
           <div className="flex items-center gap-4">
             <span aria-hidden="true" className="h-px w-10 shrink-0 bg-platinum/50" />
@@ -79,7 +81,7 @@ export default function PracticeAreas() {
           <h2 id="areas-title" className="section-title font-serif font-semibold leading-tight text-ivory text-balance">Selecione a matéria do seu caso.</h2>
           <p className="text-base leading-relaxed text-ivory-muted text-pretty">Cada pasta reúne as frentes que o escritório conduz naquela área. Abra a que corresponde à sua situação e fale direto com um advogado.</p>
         </div>
-        <div className="flex flex-col gap-2.5 lg:min-h-[36rem] lg:flex-row">
+        <div ref={cabinetRef} className="dossier-cabinet flex flex-col gap-2.5">
           {PRACTICE_AREAS.map((area, index) => {
             const Icon = ICONS[index];
             const isOpen = active === index;
@@ -87,11 +89,11 @@ export default function PracticeAreas() {
               <article key={area.id} id={`area-${area.id}`} data-open={isOpen} className={`dossier-item relative flex min-w-0 flex-col rounded-sm border ${isOpen ? 'border-platinum/45 bg-navy-elevated' : 'border-platinum/20 bg-navy-elevated/40 hover:border-platinum/40'}`}>
                 {/* Chrome edge marks the open file, like a tab standing proud. */}
                 <span aria-hidden="true" className={`pointer-events-none absolute inset-y-0 left-0 w-0.5 rounded-l-sm bg-platinum transition-opacity ${isOpen ? 'opacity-100' : 'opacity-20'}`} />
-                <h3 className={isOpen ? 'm-0' : 'm-0 lg:flex-1'}>
+                <h3 className="dossier-heading m-0">
                   <button id={`dossier-trigger-${area.id}`} type="button" onClick={() => handleSelect(index)} onPointerEnter={(event) => {
-                    if (event.pointerType === 'mouse' && window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)').matches) setActive(index);
+                    if (event.pointerType === 'mouse' && cabinetRef.current && getComputedStyle(cabinetRef.current).flexDirection === 'row' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) setActive(index);
                   }} onKeyDown={(event) => onKeyDown(event, index)} aria-label={area.title} aria-expanded={isOpen} aria-controls={`dossier-panel-${area.id}`} className="dossier-trigger h-full w-full rounded-sm text-left focus-visible:outline-offset-[-4px]">
-                    <span className="flex items-center gap-3 px-5 py-4 lg:hidden">
+                    <span className="dossier-mobile-trigger flex items-center gap-3 px-5 py-4">
                       <Icon className="h-5 w-5 shrink-0 text-platinum" aria-hidden="true" />
                       <span className="flex min-w-0 flex-1 flex-col gap-1">
                         <span className="text-sm uppercase tracking-wider text-platinum">{area.matter}</span>
@@ -100,12 +102,12 @@ export default function PracticeAreas() {
                       <Plus className={`h-5 w-5 shrink-0 text-platinum transition-transform ${isOpen ? 'rotate-[135deg]' : ''}`} aria-hidden="true" />
                     </span>
                     {isOpen ? (
-                      <span className="hidden items-center gap-3 px-6 pt-6 lg:flex">
+                      <span className="dossier-desktop-caption items-center gap-3 px-6 pt-6">
                         <Icon className="h-5 w-5 shrink-0 text-platinum" aria-hidden="true" />
                         <span className="text-sm uppercase tracking-wider text-platinum">{area.matter}</span>
                       </span>
                     ) : (
-                      <span className="hidden h-full min-h-80 flex-col items-center justify-between gap-5 px-3 py-6 lg:flex">
+                      <span className="dossier-desktop-tab h-full min-h-80 flex-col items-center justify-between gap-5 px-3 py-6">
                         <Icon className="h-5 w-5 shrink-0 text-platinum" aria-hidden="true" />
                         <span className="rotate-180 whitespace-nowrap font-serif text-lg font-semibold text-ivory [writing-mode:vertical-rl]">{area.title}</span>
                         <Plus className="h-5 w-5 shrink-0 text-platinum" aria-hidden="true" />
@@ -114,9 +116,9 @@ export default function PracticeAreas() {
                   </button>
                 </h3>
                 <div id={`dossier-panel-${area.id}`} hidden={!isOpen} role="region" aria-labelledby={`dossier-trigger-${area.id}`} className="flex-1">
-                  <div className="flex h-full min-w-0 flex-col gap-5 px-5 pb-6 lg:px-6 lg:pt-3">
+                  <div className="dossier-content flex h-full min-w-0 flex-col gap-5 px-5 pb-6">
                     <div className="flex flex-wrap items-center gap-3">
-                      <span aria-hidden="true" className="hidden font-serif text-3xl font-semibold leading-tight text-ivory lg:inline">{area.title}</span>
+                      <span aria-hidden="true" className="dossier-desktop-title font-serif text-3xl font-semibold leading-tight text-ivory">{area.title}</span>
                       {area.tag && <span className="rounded-sm bg-platinum px-3 py-1 text-sm font-medium uppercase tracking-wide text-navy">{area.tag}</span>}
                     </div>
                     <p className="max-w-lg text-sm leading-relaxed text-ivory-muted">{area.description}</p>

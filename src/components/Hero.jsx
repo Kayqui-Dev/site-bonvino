@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <section id="hero" aria-labelledby="hero-title" className="relative flex min-h-[100svh] items-center px-4 pb-12 pt-36 sm:px-6 lg:px-12 lg:pb-16">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 vignette-navy opacity-60" />
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center gap-10 text-center">
+      <div className="hero-layout relative mx-auto flex w-full max-w-5xl flex-col items-center gap-10 text-center">
         <div className="flex w-full flex-col items-center gap-7 sm:gap-8">
           <div className="flex flex-col items-center gap-2">
             <span className="font-sans text-sm uppercase tracking-[0.24em] text-platinum sm:tracking-[0.35em]">Bonvino &amp; Pereira</span>
@@ -40,7 +40,7 @@ export default function Hero() {
           </div>
         </div>
         {/* Service facts, not achievement stats — a hard rule for OAB copy. */}
-        <dl className="flex w-full max-w-2xl divide-x divide-platinum/15 border-t border-platinum/15 pt-6">
+        <dl className="hero-facts flex w-full max-w-2xl divide-x divide-platinum/15 border-t border-platinum/15 pt-6">
           {FACTS.map((fact) => (
             <div key={fact.label} className="flex min-w-0 flex-1 flex-col gap-2 px-2 sm:px-4">
               <dt className="font-sans text-sm leading-relaxed text-ivory-muted">{fact.label}</dt>

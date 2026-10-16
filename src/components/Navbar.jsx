@@ -13,7 +13,26 @@ const LINKS = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef(/** @type {HTMLElement | null} */ (null));
+  const barRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const menuButtonRef = useRef(/** @type {HTMLButtonElement | null} */ (null));
+
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const updateHeader = () => {
+      document.documentElement.style.setProperty('--header-bottom', `${Math.ceil(bar.getBoundingClientRect().bottom)}px`);
+      if (!menuButtonRef.current?.getClientRects().length) setMobileOpen(false);
+    };
+    const observer = new ResizeObserver(updateHeader);
+    observer.observe(bar);
+    window.addEventListener('resize', updateHeader, { passive: true });
+    updateHeader();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateHeader);
+      document.documentElement.style.removeProperty('--header-bottom');
+    };
+  }, []);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -25,17 +44,11 @@ export default function Navbar() {
     const closeOutside = (event) => {
       if (!headerRef.current?.contains(event.target)) setMobileOpen(false);
     };
-    const desktop = window.matchMedia('(min-width: 1024px)');
-    const closeOnDesktop = (event) => {
-      if (event.matches) setMobileOpen(false);
-    };
     document.addEventListener('keydown', closeOnEscape);
     document.addEventListener('pointerdown', closeOutside);
-    desktop.addEventListener('change', closeOnDesktop);
     return () => {
       document.removeEventListener('keydown', closeOnEscape);
       document.removeEventListener('pointerdown', closeOutside);
-      desktop.removeEventListener('change', closeOnDesktop);
     };
   }, [mobileOpen]);
 
@@ -45,32 +58,30 @@ export default function Navbar() {
     <header ref={headerRef} className="site-header" onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) setMobileOpen(false);
     }}>
-      <nav aria-label="Navegação principal" className="mx-auto max-w-5xl">
-        <div className="glass-nav flex items-center justify-between rounded-full px-4 py-3 sm:px-8">
+      <nav aria-label="Navegação principal" className="navigation-container mx-auto max-w-5xl">
+        <div ref={barRef} className="navigation-bar glass-nav flex items-center justify-between rounded-full">
           <a href="#hero" aria-label={`${FIRM.name} — início`} className="shrink-0 rounded-full" onClick={() => setMobileOpen(false)}>
-            <Logo />
+            <Logo className="navigation-logo" />
           </a>
-          {/* Desktop Links. Switched at lg, not md: at 768px the four links plus
-              the CTA overflowed the bar by 22px and pushed the page sideways. */}
-          <div className="hidden items-center gap-6 lg:flex">
+          <div className="desktop-links items-center gap-6">
             {LINKS.map((link) => (
               <a key={link.href} href={link.href} className="link-hover flex min-h-11 items-center rounded-lg px-1 py-2 text-sm font-medium uppercase tracking-wider text-ivory/80 hover:text-platinum">{link.label}</a>
             ))}
           </div>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-magnetic hidden min-h-11 items-center gap-2 rounded-full bg-platinum px-5 py-3 text-sm font-semibold uppercase tracking-wider text-navy hover:bg-platinum-hover lg:inline-flex">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="desktop-consult btn-magnetic min-h-11 items-center gap-2 rounded-full bg-platinum px-5 py-3 text-sm font-semibold uppercase tracking-wider text-navy hover:bg-platinum-hover">
             <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
             Agendar consulta
           </a>
-          <div className="flex items-center gap-2 lg:hidden">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex h-11 w-11 items-center justify-center rounded-full bg-platinum text-navy" aria-label="Agendar consulta pelo WhatsApp">
+          <div className="mobile-controls items-center gap-2">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="navigation-icon-button flex items-center justify-center rounded-full bg-platinum text-navy" aria-label="Agendar consulta pelo WhatsApp">
               <MessageCircle className="h-5 w-5" aria-hidden="true" />
             </a>
-            <button ref={menuButtonRef} type="button" onClick={() => setMobileOpen((open) => !open)} className="flex h-11 w-11 items-center justify-center rounded-full text-ivory-muted hover:text-platinum" aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">
+            <button ref={menuButtonRef} type="button" onClick={() => setMobileOpen((open) => !open)} className="navigation-icon-button flex items-center justify-center rounded-full text-ivory-muted hover:text-platinum" aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'} aria-expanded={mobileOpen} aria-controls="mobile-navigation">
               {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
-        <div id="mobile-navigation" hidden={!mobileOpen} className="mobile-navigation glass-nav mt-2 rounded-3xl p-4 shadow-xl lg:hidden">
+        <div id="mobile-navigation" hidden={!mobileOpen} className="mobile-navigation glass-nav mt-2 rounded-3xl p-4 shadow-xl">
           <div className="flex flex-col">
             {LINKS.map((link) => (
               <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="flex min-h-12 items-center border-b border-platinum/15 px-3 py-3 text-sm uppercase tracking-wider text-ivory hover:text-platinum">{link.mobileLabel}</a>

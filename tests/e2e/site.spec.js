@@ -20,7 +20,13 @@ async function assertLayout(page) {
     const issues = [];
     if (document.documentElement.scrollWidth > innerWidth + 1) issues.push('overflow do documento');
     if (['hidden', 'clip'].includes(getComputedStyle(document.body).overflowX)) issues.push('máscara global de overflow');
-    for (const element of document.querySelectorAll('main p, main h1, main h2, main h3, main h4, main label, main li, footer a, .section-label')) {
+    const cabinet = document.querySelector('.dossier-cabinet');
+    const openFolder = cabinet.querySelector('[data-open="true"]');
+    if (getComputedStyle(cabinet).flexDirection === 'row' && openFolder?.getBoundingClientRect().width < Math.min(280, cabinet.clientWidth / 3)) issues.push('pasta expandida sem largura legível');
+    for (const overlay of document.querySelectorAll('.partner-overlay')) {
+      if (overlay.getBoundingClientRect().top < overlay.parentElement.getBoundingClientRect().top - 1) issues.push('nome do sócio recortado pela foto');
+    }
+    for (const element of document.querySelectorAll('main p, main h1, main h2, main h3, main h4, main label, main li, main dt, main dd, main a, main button, footer a, .section-label')) {
       if (!element.checkVisibility({ checkVisibilityCSS: true }) || element.closest('[hidden]')) continue;
       const rect = element.getBoundingClientRect();
       if (rect.right > innerWidth + 1 || rect.left < -1 || element.scrollWidth > element.clientWidth + 2) issues.push(element.textContent.trim().slice(0, 100));
@@ -65,6 +71,17 @@ test('menu curto tem rolagem, fecha ao navegar, com Escape e fora dele', async (
   await trigger.click();
   await page.locator('#contact-title').click();
   await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('ação flutuante não encobre conteúdo em celular ou desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await openSite(page);
+  await page.locator('#areas').scrollIntoViewIfNeeded();
+  await expect(page.locator('.whatsapp-float')).toBeHidden();
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.evaluate(() => window.scrollTo({ top: document.getElementById('areas').offsetTop + 1, behavior: 'instant' }));
+  await expect(page.locator('.whatsapp-float')).toBeVisible();
+  expect(await page.locator('.whatsapp-float').evaluate((element) => element.getBoundingClientRect().left >= document.querySelector('.dossier-layout').getBoundingClientRect().right + 8)).toBe(true);
 });
 
 test('acordeão funciona com teclado e preserva uma pasta no desktop', async ({ page }) => {
@@ -159,13 +176,18 @@ for (const width of [390, 1440]) {
   });
 }
 
-test('texto a 200% reorganiza conteúdo sem overflow', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await openSite(page);
-  await page.addStyleTag({ content: 'html { font-size: 200%; }' });
-  await assertLayout(page);
-  await page.locator('#sobre').scrollIntoViewIfNeeded();
-  await assertLayout(page);
-  await page.locator('#contato').scrollIntoViewIfNeeded();
-  await assertLayout(page);
-});
+for (const width of [320, 390, 1024, 1440]) {
+  test(`texto a 200% reorganiza conteúdo em ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await openSite(page);
+    await page.addStyleTag({ content: 'html { font-size: 200%; }' });
+    await assertLayout(page);
+    expect(await page.locator('header nav').evaluate((element) => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+    await expect(page.getByRole('button', { name: 'Abrir menu', exact: true })).toBeVisible();
+    expect(await page.locator('.dossier-cabinet').evaluate((element) => getComputedStyle(element).flexDirection)).toBe('column');
+    await page.locator('#sobre').scrollIntoViewIfNeeded();
+    await assertLayout(page);
+    await page.locator('#contato').scrollIntoViewIfNeeded();
+    await assertLayout(page);
+  });
+}

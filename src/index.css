@@ -33,7 +33,7 @@
     --color-primary: 195 208 226;
     --color-foreground: 245 248 252;
     --color-muted: 148 163 184;
-    --header-offset: calc(7.5rem + env(safe-area-inset-top, 0px));
+    --header-offset: calc(var(--header-bottom, 6.5rem) + 1.25rem);
     color-scheme: dark;
   }
 
@@ -54,7 +54,7 @@
     scroll-margin-top: var(--header-offset);
   }
 
-  :where(p, h1, h2, h3, h4, a, li, dd) {
+  :where(p, h1, h2, h3, h4, a, li, dt, dd) {
     overflow-wrap: break-word;
   }
 }
@@ -66,7 +66,9 @@
 
   .section-label {
     @apply inline-block max-w-full rounded-full border border-platinum/30 bg-platinum/10 px-4 py-2 text-center font-sans text-sm font-semibold uppercase text-platinum;
-    letter-spacing: 0.14em;
+    padding-inline: min(1rem, 16px);
+    letter-spacing: min(0.14em, 2px);
+    overflow-wrap: anywhere;
   }
 
   .hero-title {
@@ -105,10 +107,48 @@
   padding-right: max(1rem, env(safe-area-inset-right, 0px));
 }
 
+.navigation-container {
+  container: navigation / inline-size;
+}
+
+.navigation-bar {
+  padding: 0.75rem clamp(0.75rem, 3vw, 2rem);
+}
+
+.navigation-logo {
+  max-width: 56px;
+  max-height: 56px;
+}
+
+.desktop-links, .desktop-consult {
+  display: none;
+}
+
+.mobile-controls {
+  display: flex;
+}
+
+.navigation-icon-button {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.navigation-icon-button svg {
+  width: 24px;
+  height: 24px;
+}
+
 .mobile-navigation {
-  max-height: calc(100dvh - 7rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  max-height: calc(100dvh - var(--header-bottom, 6.5rem) - 0.5rem - max(0.75rem, env(safe-area-inset-bottom, 0px)));
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+@container navigation (min-width: 60rem) {
+  .desktop-links { display: flex; }
+  .desktop-consult { display: inline-flex; }
+  .mobile-controls, .mobile-navigation { display: none; }
 }
 
 .footer-shell {
@@ -136,21 +176,82 @@
   right: max(1rem, env(safe-area-inset-right, 0px));
   bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   z-index: 30;
+  max-width: 56px;
+  max-height: 56px;
+}
+
+.whatsapp-float svg {
+  max-width: 24px;
+  max-height: 24px;
 }
 
 .whatsapp-float:not([hidden]) {
   display: flex;
 }
 
-@media (min-width: 64rem) {
-  .dossier-item {
-    flex: 0 0 clamp(3.5rem, 5.5vw, 5rem);
-    transition: flex 200ms ease-out, border-color 180ms ease;
+.dossier-layout {
+  container: practice / inline-size;
+}
+
+.dossier-desktop-caption, .dossier-desktop-tab, .dossier-desktop-title {
+  display: none;
+}
+
+@container practice (min-width: 58rem) {
+  .dossier-cabinet {
+    flex-direction: row;
+    min-height: 36rem;
   }
 
-  .dossier-item[data-open='true'] {
-    flex: 1 1 0%;
+  .dossier-item {
+    flex: 0 0 clamp(3.5rem, 5.5vw, 5rem);
+    transition: border-color 180ms ease, background-color 180ms ease;
   }
+
+  .dossier-item[data-open='true'] { flex: 1 1 0%; }
+  .dossier-item[data-open='false'] .dossier-heading { flex: 1; }
+  .dossier-mobile-trigger { display: none; }
+  .dossier-desktop-caption, .dossier-desktop-tab { display: flex; }
+  .dossier-desktop-title { display: inline; }
+  .dossier-content { padding: 0.75rem 1.5rem 1.5rem; }
+}
+
+.hero-layout { container: hero / inline-size; }
+.contact-container { container: contact / inline-size; }
+.partners-container { container: partners / inline-size; }
+
+@container hero (max-width: 16rem) {
+  .hero-facts { flex-direction: column; gap: 1rem; }
+  .hero-facts > div { padding-inline: 0; }
+  .hero-facts > div + div {
+    border-left-width: 0;
+    border-top: 1px solid rgb(var(--color-primary) / 0.15);
+    padding-top: 1rem;
+  }
+}
+
+.contact-fields {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.footer-navigation {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+}
+
+@container contact (max-width: 16rem) {
+  .contact-form, .contact-review, .contact-panel { padding: 20px; }
+  .contact-action { padding-inline: 16px; gap: 12px; }
+  .contact-action svg { max-width: 24px; max-height: 24px; }
+  .contact-action span { min-width: 0; overflow-wrap: anywhere; }
+}
+
+@container partners (max-width: 16rem) {
+  .partner-photo { aspect-ratio: auto; }
+  .partner-photo picture { height: auto; aspect-ratio: 4 / 5; }
+  .partner-photo img { aspect-ratio: 4 / 5; }
+  .partner-photo > [aria-hidden='true'] { display: none; }
+  .partner-overlay { position: static; padding: 20px; background: rgb(var(--color-background)); color: rgb(var(--color-foreground)); }
+  .partner-body { padding: 20px; }
 }
 
 /* Short landscape viewports must keep navigation clear of floating actions. */
