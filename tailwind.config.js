@@ -40,26 +40,6 @@ export default {
         '3rem': '3rem',
         '4rem': '4rem',
       },
-      animation: {
-        'pulse-subtle': 'pulseSubtle 2.2s infinite ease-in-out',
-        'float': 'float 4s infinite ease-in-out',
-        'sheen': 'sheen 6s infinite linear',
-      },
-      keyframes: {
-        pulseSubtle: {
-          '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(195, 208, 226, 0.4)' },
-          '50%': { transform: 'scale(1.05)', boxShadow: '0 0 0 12px rgba(195, 208, 226, 0)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-6px)' },
-        },
-        // Chrome light sweeping across the monogram
-        sheen: {
-          '0%': { backgroundPosition: '-200% center' },
-          '100%': { backgroundPosition: '200% center' },
-        },
-      }
     },
   },
   plugins: [],

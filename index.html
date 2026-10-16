@@ -2,8 +2,9 @@
 <html lang="pt-BR" class="dark scroll-smooth bg-navy">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/brand/logo-bp.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/icon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/brand/icon-180.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#060A16" />
     <title>Bonvino &amp; Pereira Sociedade de Advogados | São Paulo</title>
     <meta name="description" content="Bonvino &amp; Pereira Sociedade de Advogados. Advocacia criminal estratégica com Leandro Bonvino e assessoria tributária e empresarial com Denilson Pereira. Atendimento na Av. Paulista e online." />
@@ -11,24 +12,21 @@
     <meta property="og:description" content="Excelência jurídica e segurança para decidir. Advocacia criminal estratégica e assessoria tributária e empresarial em São Paulo." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    
-    <!-- Google Fonts: Inter, Playfair Display -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://site-bonvino-blush.vercel.app/" />
+    <meta property="og:url" content="https://site-bonvino-blush.vercel.app/" />
+    <meta property="og:site_name" content="Bonvino &amp; Pereira Sociedade de Advogados" />
+    <meta property="og:image" content="https://site-bonvino-blush.vercel.app/brand/logo-bp.jpg" />
+    <meta property="og:image:width" content="640" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="Bonvino &amp; Pereira Sociedade de Advogados" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="preload" href="/node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/node_modules/@fontsource-variable/playfair-display/files/playfair-display-latin-wght-italic.woff2" as="font" type="font/woff2" crossorigin />
   </head>
-  <body class="bg-navy text-ivory antialiased selection:bg-platinum selection:text-navy min-h-screen relative overflow-x-hidden">
-    <!-- SVG Noise Overlay (Preset B - 0.05 Opacity Noise) -->
-    <div class="fixed inset-0 pointer-events-none z-[999] opacity-[0.05] mix-blend-overlay">
-      <svg class="w-full h-full">
-        <filter id="noiseFilter">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-      </svg>
-    </div>
-
+  <body class="bg-navy text-ivory antialiased selection:bg-platinum selection:text-navy min-h-screen relative">
     <div id="root"></div>
+    <noscript><p>Ative o JavaScript para abrir as áreas de atuação e preparar uma mensagem. Você também pode entrar em contato pelo telefone <a href="tel:+5511917376916">(11) 91737-6916</a>.</p></noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
